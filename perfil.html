@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modificar perfil - Sistema de Gastos Comunes">
+    <title>Mi Perfil - Gastos Comunes</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-building"></i> Gastos Comunes
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house-door"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="perfil.html">
+                            <i class="bi bi-person-circle"></i> Mi Perfil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="btnCerrarSesion">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5">
+        <!-- HEADER -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-circle fs-1 text-primary me-3"></i>
+                    <div>
+                        <h1 class="fw-bold mb-0">Mi Perfil</h1>
+                        <p class="text-muted mb-0">Gestiona tu información personal y contraseña</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <!-- INFORMACIÓN PERSONAL -->
+                <div class="card shadow-sm mb-4 fade-in">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-person-vcard"></i> Información Personal
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="formPerfil" novalidate>
+                            <div class="row">
+                                <!-- NOMBRE COMPLETO -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombre" class="form-label fw-bold">
+                                        <i class="bi bi-person"></i> Nombre Completo *
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="nombre" 
+                                        name="nombre"
+                                        placeholder="Ingresa tu nombre completo"
+                                        required>
+                                    <div class="invalid-feedback" id="nombreError"></div>
+                                </div>
+
+                                <!-- RUT (NO EDITABLE) -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="rut" class="form-label fw-bold">
+                                        <i class="bi bi-card-text"></i> RUT
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control bg-light" 
+                                        id="rut" 
+                                        name="rut"
+                                        readonly>
+                                    <small class="text-muted">El RUT no puede ser modificado</small>
+                                </div>
+
+                                <!-- EMAIL -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label fw-bold">
+                                        <i class="bi bi-envelope"></i> Correo Electrónico *
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        class="form-control" 
+                                        id="email" 
+                                        name="email"
+                                        placeholder="tu@email.com"
+                                        required>
+                                    <div class="invalid-feedback" id="emailError"></div>
+                                </div>
+
+                                <!-- TELÉFONO -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="telefono" class="form-label fw-bold">
+                                        <i class="bi bi-phone"></i> Teléfono *
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">+56</span>
+                                        <input 
+                                            type="tel" 
+                                            class="form-control" 
+                                            id="telefono" 
+                                            name="telefono"
+                                            placeholder="912345678"
+                                            maxlength="9"
+                                            required>
+                                    </div>
+                                    <div class="invalid-feedback" id="telefonoError"></div>
+                                </div>
+                            </div>
+
+                            <!-- INFORMACIÓN DE VIVIENDA (NO EDITABLE) -->
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6 class="fw-bold mb-3">
+                                        <i class="bi bi-house-door"></i> Información de Vivienda
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <strong>Pasaje:</strong> <span id="pasajeDisplay">-</span>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <strong>Casa:</strong> <span id="casaDisplay">-</span>
+                                        </div>
+                                        <div class="col-12">
+                                            <small class="text-muted">
+                                                <i class="bi bi-info-circle"></i> Para cambiar tu vivienda, contacta al administrador
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BOTONES DE ACCIÓN -->
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i> Guardar Cambios
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="btnCancelar">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- CAMBIAR CONTRASEÑA -->
+                <div class="card shadow-sm mb-4 fade-in">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-shield-lock"></i> Cambiar Contraseña
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="formCambiarPassword" novalidate>
+                            <!-- CONTRASEÑA ACTUAL -->
+                            <div class="mb-3">
+                                <label for="passwordActual" class="form-label fw-bold">
+                                    <i class="bi bi-lock"></i> Contraseña Actual *
+                                </label>
+                                <div class="input-group">
+                                    <input 
+                                        type="password" 
+                                        class="form-control" 
+                                        id="passwordActual" 
+                                        name="passwordActual"
+                                        placeholder="••••••••"
+                                        required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordActual">
+                                        <i class="bi bi-eye" id="eyeIconActual"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback" id="passwordActualError"></div>
+                            </div>
+
+                            <!-- NUEVA CONTRASEÑA -->
+                            <div class="mb-3">
+                                <label for="passwordNueva" class="form-label fw-bold">
+                                    <i class="bi bi-lock-fill"></i> Nueva Contraseña *
+                                </label>
+                                <div class="input-group">
+                                    <input 
+                                        type="password" 
+                                        class="form-control" 
+                                        id="passwordNueva" 
+                                        name="passwordNueva"
+                                        placeholder="••••••••"
+                                        required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordNueva">
+                                        <i class="bi bi-eye" id="eyeIconNueva"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback" id="passwordNuevaError"></div>
+                            </div>
+
+                            <!-- CONFIRMAR NUEVA CONTRASEÑA -->
+                            <div class="mb-3">
+                                <label for="passwordConfirmar" class="form-label fw-bold">
+                                    <i class="bi bi-lock-fill"></i> Confirmar Nueva Contraseña *
+                                </label>
+                                <div class="input-group">
+                                    <input 
+                                        type="password" 
+                                        class="form-control" 
+                                        id="passwordConfirmar" 
+                                        name="passwordConfirmar"
+                                        placeholder="••••••••"
+                                        required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmar">
+                                        <i class="bi bi-eye" id="eyeIconConfirmar"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback" id="passwordConfirmarError"></div>
+                            </div>
+
+                            <!-- REQUISITOS DE CONTRASEÑA -->
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6 class="fw-bold mb-2">Requisitos de seguridad:</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <small id="req-longitud" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> 8-20 caracteres
+                                            </small>
+                                            <small id="req-mayuscula" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Una mayúscula
+                                            </small>
+                                            <small id="req-minuscula" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Una minúscula
+                                            </small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small id="req-numero" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Un número
+                                            </small>
+                                            <small id="req-especial" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Un carácter especial
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BOTÓN CAMBIAR CONTRASEÑA -->
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-shield-check"></i> Cambiar Contraseña
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="col-12 col-lg-4">
+                <!-- INFORMACIÓN DE CUENTA -->
+                <div class="card shadow-sm mb-4 fade-in">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="bi bi-info-circle"></i> Información de Cuenta
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <small class="text-muted d-block">Tipo de Usuario</small>
+                            <strong id="tipoUsuarioDisplay">-</strong>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block">Fecha de Registro</small>
+                            <strong id="fechaRegistroDisplay">-</strong>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block">Estado de Cuenta</small>
+                            <span class="badge bg-success">Activa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACCIONES RÁPIDAS -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="mb-0">
+                            <i class="bi bi-lightning"></i> Acciones Rápidas
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-arrow-left-right"></i> Ir al Dashboard
+                            </a>
+                            <a href="recuperar.html" class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-key"></i> ¿Olvidaste tu contraseña?
+                            </a>
+                            <button class="btn btn-outline-danger btn-sm" id="btnEliminarCuenta">
+                                <i class="bi bi-trash"></i> Eliminar Cuenta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AYUDA -->
+                <div class="card shadow-sm border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="bi bi-question-circle fs-2 text-primary mb-2"></i>
+                        <p class="mb-2"><strong>¿Necesitas ayuda?</strong></p>
+                        <small class="text-muted">
+                            Contacta al administrador del sistema para cualquier consulta
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">
+                        <i class="bi bi-c-circle"></i> 2025 Gastos Comunes. Todos los derechos reservados.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="index.html" class="text-white text-decoration-none me-3">Inicio</a>
+                    <a href="perfil.html" class="text-white text-decoration-none">Mi Perfil</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL CONFIRMAR ELIMINACIÓN -->
+    <div class="modal fade" id="modalEliminarCuenta" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>¿Estás seguro de que deseas eliminar tu cuenta?</strong></p>
+                    <p class="text-muted mb-0">Esta acción no se puede deshacer. Se eliminarán todos tus datos permanentemente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                        <i class="bi bi-trash"></i> Sí, Eliminar Cuenta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="js/script.js"></script>
+    <script src="js/validaciones-perfil.js"></script>
+</body>
+</html>

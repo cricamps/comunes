@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Registro de usuarios - Sistema de Gastos Comunes">
+    <title>Registrarse - Gastos Comunes</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-building"></i> Gastos Comunes
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house-door"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="registro.html">
+                            <i class="bi bi-person-plus"></i> Registrarse
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="card shadow-lg border-0 fade-in">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-person-plus-fill fs-1 text-primary"></i>
+                            <h2 class="fw-bold mt-3">Crear Cuenta Nueva</h2>
+                            <p class="text-muted">Completa todos los campos para registrarte</p>
+                        </div>
+
+                        <!-- FORMULARIO DE REGISTRO -->
+                        <form id="formRegistro" novalidate>
+                            <div class="row">
+                                <!-- NOMBRE COMPLETO -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombre" class="form-label fw-bold">
+                                        <i class="bi bi-person"></i> Nombre Completo *
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control form-control-lg" 
+                                        id="nombre" 
+                                        name="nombre"
+                                        placeholder="Ingresa tu nombre completo"
+                                        required>
+                                    <div class="invalid-feedback" id="nombreError"></div>
+                                    <small class="text-muted">Solo letras y espacios (2-50 caracteres)</small>
+                                </div>
+
+                                <!-- RUT -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="rut" class="form-label fw-bold">
+                                        <i class="bi bi-card-text"></i> RUT *
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control form-control-lg" 
+                                        id="rut" 
+                                        name="rut"
+                                        placeholder="12.345.678-9"
+                                        maxlength="12"
+                                        required>
+                                    <div class="invalid-feedback" id="rutError"></div>
+                                    <small class="text-muted">Formato: 12.345.678-9</small>
+                                </div>
+
+                                <!-- EMAIL -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label fw-bold">
+                                        <i class="bi bi-envelope"></i> Correo Electrónico *
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        class="form-control form-control-lg" 
+                                        id="email" 
+                                        name="email"
+                                        placeholder="tu@email.com"
+                                        required>
+                                    <div class="invalid-feedback" id="emailError"></div>
+                                    <small class="text-muted">Ejemplo: usuario@correo.com</small>
+                                </div>
+
+                                <!-- TELÉFONO -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="telefono" class="form-label fw-bold">
+                                        <i class="bi bi-phone"></i> Teléfono *
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">+56</span>
+                                        <input 
+                                            type="tel" 
+                                            class="form-control form-control-lg" 
+                                            id="telefono" 
+                                            name="telefono"
+                                            placeholder="912345678"
+                                            maxlength="9"
+                                            required>
+                                    </div>
+                                    <div class="invalid-feedback" id="telefonoError"></div>
+                                    <small class="text-muted">9 dígitos, debe empezar con 9</small>
+                                </div>
+                            </div>
+
+                            <!-- INFORMACIÓN DE VIVIENDA -->
+                            <div class="card bg-light mb-4 mt-3">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold mb-3">
+                                        <i class="bi bi-house-door"></i> Información de Vivienda
+                                    </h5>
+                                    
+                                    <div class="row">
+                                        <!-- SELECCIÓN DE PASAJE -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="pasaje" class="form-label fw-bold">
+                                                Pasaje *
+                                            </label>
+                                            <select 
+                                                class="form-select form-select-lg" 
+                                                id="pasaje" 
+                                                name="pasaje"
+                                                required>
+                                                <option value="">Selecciona un pasaje</option>
+                                                <option value="8651">Pasaje 8651 (Casas A-F)</option>
+                                                <option value="8707">Pasaje 8707 (Casas A-G)</option>
+                                            </select>
+                                            <div class="invalid-feedback" id="pasajeError"></div>
+                                        </div>
+
+                                        <!-- SELECCIÓN DE CASA -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="casa" class="form-label fw-bold">
+                                                Número de Casa *
+                                            </label>
+                                            <select 
+                                                class="form-select form-select-lg" 
+                                                id="casa" 
+                                                name="casa"
+                                                required
+                                                disabled>
+                                                <option value="">Primero selecciona un pasaje</option>
+                                            </select>
+                                            <div class="invalid-feedback" id="casaError"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- VISTA PREVIA DE DIRECCIÓN -->
+                                    <div id="direccionPreview" class="alert alert-info d-none">
+                                        <i class="bi bi-geo-alt-fill"></i> 
+                                        <strong>Tu dirección será:</strong> 
+                                        <span id="direccionCompleta"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CONTRASEÑA -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label fw-bold">
+                                        <i class="bi bi-lock"></i> Contraseña *
+                                    </label>
+                                    <div class="input-group">
+                                        <input 
+                                            type="password" 
+                                            class="form-control form-control-lg" 
+                                            id="password" 
+                                            name="password"
+                                            placeholder="••••••••"
+                                            required>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="bi bi-eye" id="eyeIcon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback" id="passwordError"></div>
+                                </div>
+
+                                <!-- CONFIRMAR CONTRASEÑA -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirmPassword" class="form-label fw-bold">
+                                        <i class="bi bi-lock-fill"></i> Confirmar Contraseña *
+                                    </label>
+                                    <div class="input-group">
+                                        <input 
+                                            type="password" 
+                                            class="form-control form-control-lg" 
+                                            id="confirmPassword" 
+                                            name="confirmPassword"
+                                            placeholder="••••••••"
+                                            required>
+                                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                            <i class="bi bi-eye" id="eyeIconConfirm"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback" id="confirmPasswordError"></div>
+                                </div>
+                            </div>
+
+                            <!-- REQUISITOS DE CONTRASEÑA -->
+                            <div class="card bg-light mb-4">
+                                <div class="card-body">
+                                    <h6 class="fw-bold mb-3">
+                                        <i class="bi bi-shield-check"></i> Requisitos de seguridad de la contraseña:
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <small id="req-longitud" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Mínimo 8 caracteres, máximo 20
+                                            </small>
+                                            <small id="req-mayuscula" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Al menos una letra mayúscula
+                                            </small>
+                                            <small id="req-minuscula" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Al menos una letra minúscula
+                                            </small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small id="req-numero" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Al menos un número
+                                            </small>
+                                            <small id="req-especial" class="text-muted d-block mb-1">
+                                                <i class="bi bi-circle"></i> Al menos un carácter especial (!@#$%^&*)
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TÉRMINOS Y CONDICIONES -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terminos" required>
+                                    <label class="form-check-label" for="terminos">
+                                        Acepto los <a href="#" class="text-decoration-none">términos y condiciones</a> 
+                                        y la <a href="#" class="text-decoration-none">política de privacidad</a> *
+                                    </label>
+                                    <div class="invalid-feedback" id="terminosError"></div>
+                                </div>
+                            </div>
+
+                            <!-- BOTÓN SUBMIT -->
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                                <i class="bi bi-person-plus"></i> Crear Cuenta
+                            </button>
+
+                            <!-- CAMPOS OBLIGATORIOS -->
+                            <p class="text-center text-muted mb-3">
+                                <small>* Campos obligatorios</small>
+                            </p>
+
+                            <!-- LINK A LOGIN -->
+                            <hr class="my-4">
+                            
+                            <div class="text-center">
+                                <p class="mb-0">¿Ya tienes una cuenta?</p>
+                                <a href="login.html" class="btn btn-outline-primary mt-2">
+                                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- INFORMACIÓN ADICIONAL -->
+                <div class="card mt-4 border-0 bg-light">
+                    <div class="card-body text-center">
+                        <p class="mb-2">
+                            <i class="bi bi-info-circle text-primary"></i> 
+                            <strong>Sistema de Gastos Comunes</strong>
+                        </p>
+                        <small class="text-muted">
+                            Pasaje 8651: Casas A, B, C, D, E, F<br>
+                            Pasaje 8707: Casas A, B, C, D, E, F, G<br>
+                            Total: 13 viviendas
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">
+                        <i class="bi bi-c-circle"></i> 2025 Gastos Comunes. Todos los derechos reservados.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="index.html" class="text-white text-decoration-none me-3">Inicio</a>
+                    <a href="login.html" class="text-white text-decoration-none me-3">Iniciar Sesión</a>
+                    <a href="registro.html" class="text-white text-decoration-none">Registrarse</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="js/script.js"></script>
+    <script src="js/validaciones-registro.js"></script>
+</body>
+</html>

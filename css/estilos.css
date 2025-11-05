@@ -1,0 +1,411 @@
+/* ===================================
+   GASTOS COMUNES - ESTILOS GENERALES
+   =================================== */
+
+:root {
+    --color-primary: #667eea;
+    --color-secondary: #764ba2;
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-info: #17a2b8;
+    --color-light: #f8f9fa;
+    --color-dark: #343a40;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* ===================================
+   ANIMACIONES
+   =================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+/* ===================================
+   CARDS CON HOVER
+   =================================== */
+
+.hover-card {
+    transition: var(--transition);
+    border: none;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* ===================================
+   NAVEGACIÓN
+   =================================== */
+
+.navbar {
+    transition: var(--transition);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    transition: var(--transition);
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    position: relative;
+    transition: var(--transition);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    transition: var(--transition);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+/* ===================================
+   FORMULARIOS
+   =================================== */
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.is-invalid {
+    border-color: var(--color-danger) !important;
+}
+
+.is-valid {
+    border-color: var(--color-success) !important;
+}
+
+.invalid-feedback {
+    display: block;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.valid-feedback {
+    display: block;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: var(--color-success);
+}
+
+/* ===================================
+   BOTONES
+   =================================== */
+
+.btn {
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+}
+
+/* ===================================
+   TABLAS
+   =================================== */
+
+.table {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.table thead {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    transition: var(--transition);
+}
+
+/* ===================================
+   BADGES Y ETIQUETAS
+   =================================== */
+
+.badge {
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+}
+
+/* ===================================
+   MODALES
+   =================================== */
+
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+/* ===================================
+   ALERTAS
+   =================================== */
+
+.alert {
+    border: none;
+    border-radius: 10px;
+    animation: slideInLeft 0.5s ease-out;
+}
+
+/* ===================================
+   DASHBOARD - CARDS ESTADÍSTICAS
+   =================================== */
+
+.stat-card {
+    border-left: 4px solid;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.stat-card.primary {
+    border-left-color: var(--color-primary);
+}
+
+.stat-card.success {
+    border-left-color: var(--color-success);
+}
+
+.stat-card.warning {
+    border-left-color: var(--color-warning);
+}
+
+.stat-card.danger {
+    border-left-color: var(--color-danger);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.8rem;
+}
+
+/* ===================================
+   LISTA DE PAGOS
+   =================================== */
+
+.payment-item {
+    transition: var(--transition);
+    border-left: 3px solid transparent;
+}
+
+.payment-item:hover {
+    border-left-color: var(--color-primary);
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-paid {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-overdue {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* ===================================
+   SELECTOR DE CASAS
+   =================================== */
+
+.house-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.house-option {
+    padding: 1rem;
+    text-align: center;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.house-option:hover {
+    border-color: var(--color-primary);
+    background-color: rgba(102, 126, 234, 0.1);
+    transform: translateY(-3px);
+}
+
+.house-option.selected {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .house-selector {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .house-selector {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ===================================
+   UTILIDADES PERSONALIZADAS
+   =================================== */
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-soft {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.shadow-medium {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.shadow-strong {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.border-gradient {
+    border: 2px solid;
+    border-image: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) 1;
+}
