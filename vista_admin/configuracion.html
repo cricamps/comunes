@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Admin</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="dashboard-admin.html">
+                <i class="bi bi-shield-check"></i> Panel Admin
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard-admin.html">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestionar-gastos.html">
+                            <i class="bi bi-cash-stack"></i> Gastos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestionar-residentes.html">
+                            <i class="bi bi-people"></i> Residentes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registrar-pagos.html">
+                            <i class="bi bi-credit-card"></i> Registrar Pagos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="solicitudes.html">
+                            <i class="bi bi-envelope-check"></i> Solicitudes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reportes.html">
+                            <i class="bi bi-file-earmark-text"></i> Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="configuracion.html">
+                            <i class="bi bi-gear"></i> Configuración
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="nombreUsuario">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="../perfil.html"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="btnCerrarSesion"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="fw-bold mb-0"><i class="bi bi-gear"></i> Configuración</h1>
+                <p class="text-muted mb-0">Configura los parámetros del sistema de gastos comunes</p>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <ul class="nav nav-tabs mb-4" id="configTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="gastos-tab" data-bs-toggle="tab" data-bs-target="#gastos" type="button">
+                    <i class="bi bi-cash-coin"></i> Gastos Comunes
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="propietarios-tab" data-bs-toggle="tab" data-bs-target="#propietarios" type="button">
+                    <i class="bi bi-building"></i> Datos de Propietarios
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button">
+                    <i class="bi bi-sliders"></i> General
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="configTabsContent">
+            <!-- TAB: GASTOS COMUNES -->
+            <div class="tab-pane fade show active" id="gastos" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-cash-coin"></i> Configuración de Gastos Comunes</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formGastosComunes">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label for="montoMensual" class="form-label fw-bold">
+                                        <i class="bi bi-currency-dollar"></i> Monto Mensual por Casa
+                                    </label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="montoMensual" placeholder="0" min="0" step="1000">
+                                    </div>
+                                    <small class="text-muted">Monto base de gastos comunes mensuales por casa</small>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="diaVencimiento" class="form-label fw-bold">
+                                        <i class="bi bi-calendar-event"></i> Día de Vencimiento
+                                    </label>
+                                    <select class="form-select form-select-lg" id="diaVencimiento">
+                                        <option value="5">Día 5 de cada mes</option>
+                                        <option value="10">Día 10 de cada mes</option>
+                                        <option value="15" selected>Día 15 de cada mes</option>
+                                        <option value="20">Día 20 de cada mes</option>
+                                        <option value="25">Día 25 de cada mes</option>
+                                        <option value="30">Día 30 de cada mes</option>
+                                    </select>
+                                    <small class="text-muted">Fecha límite para el pago de gastos comunes</small>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="fechaEmision" class="form-label fw-bold">
+                                        <i class="bi bi-calendar-check"></i> Día de Emisión
+                                    </label>
+                                    <select class="form-select form-select-lg" id="fechaEmision">
+                                        <option value="1" selected>Día 1 de cada mes</option>
+                                        <option value="2">Día 2 de cada mes</option>
+                                        <option value="3">Día 3 de cada mes</option>
+                                        <option value="5">Día 5 de cada mes</option>
+                                    </select>
+                                    <small class="text-muted">Fecha en que se emiten los gastos comunes</small>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="totalCasas" class="form-label fw-bold">
+                                        <i class="bi bi-houses"></i> Total de Casas
+                                    </label>
+                                    <input type="number" class="form-control form-control-lg" id="totalCasas" value="13" readonly>
+                                    <small class="text-muted">Cantidad total de casas en la comunidad</small>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="alert alert-info">
+                                        <i class="bi bi-info-circle"></i> <strong>Información:</strong>
+                                        <p class="mb-0 mt-2">El monto mensual configurado se aplicará como referencia para nuevos cálculos. Los gastos reales se calculan sumando todos los gastos registrados del mes y dividiéndolos entre las 13 casas.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-secondary btn-lg" onclick="cargarConfiguracion()">
+                                    <i class="bi bi-arrow-clockwise"></i> Restaurar
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-save"></i> Guardar Configuración
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RESUMEN ACTUAL -->
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-white">
+                        <h6 class="mb-0"><i class="bi bi-clipboard-data"></i> Resumen Actual</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Monto Configurado</h6>
+                                <h4 class="text-primary" id="resumenMonto">$0</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Vencimiento</h6>
+                                <h4 class="text-primary" id="resumenVencimiento">Día 15</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Emisión</h6>
+                                <h4 class="text-primary" id="resumenEmision">Día 1</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Total Casas</h6>
+                                <h4 class="text-primary">13</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: DATOS DE PROPIETARIOS -->
+            <div class="tab-pane fade" id="propietarios" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-building"></i> Información de Propietarios</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <p class="lead">Listado completo de propietarios y sus viviendas</p>
+                            <button class="btn btn-success" onclick="exportarPropietarios()">
+                                <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>RUT</th>
+                                        <th>Vivienda</th>
+                                        <th>Email</th>
+                                        <th>Teléfono</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaPropietarios">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">
+                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                            Cargando propietarios...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ESTADÍSTICAS -->
+                <div class="row g-4 mt-2">
+                    <div class="col-md-4">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <i class="bi bi-people-fill fs-2 text-success"></i>
+                                <h6 class="text-muted mt-2">Total Propietarios</h6>
+                                <h3 class="text-success mb-0" id="totalPropietarios">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <i class="bi bi-house-check fs-2 text-primary"></i>
+                                <h6 class="text-muted mt-2">Casas Ocupadas</h6>
+                                <h3 class="text-primary mb-0" id="casasOcupadasProp">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-warning">
+                            <div class="card-body text-center">
+                                <i class="bi bi-house-dash fs-2 text-warning"></i>
+                                <h6 class="text-muted mt-2">Casas Disponibles</h6>
+                                <h3 class="text-warning mb-0" id="casasDisponiblesProp">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: GENERAL -->
+            <div class="tab-pane fade" id="general" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="bi bi-sliders"></i> Configuración General</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formConfigGeneral">
+                            <div class="mb-4">
+                                <label for="nombreComunidad" class="form-label fw-bold">
+                                    <i class="bi bi-building"></i> Nombre de la Comunidad
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="nombreComunidad" value="Pasajes 8651 y 8707">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="direccionComunidad" class="form-label fw-bold">
+                                    <i class="bi bi-geo-alt"></i> Dirección
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="direccionComunidad" placeholder="Dirección completa">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="emailContacto" class="form-label fw-bold">
+                                    <i class="bi bi-envelope"></i> Email de Contacto
+                                </label>
+                                <input type="email" class="form-control form-control-lg" id="emailContacto" placeholder="contacto@comunidad.cl">
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-secondary btn-lg">
+                                    <i class="bi bi-save"></i> Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="../js/script.js"></script>
+    <script src="../js/datos-iniciales.js"></script>
+    <script src="../js/admin/configuracion.js"></script>
+</body>
+</html>

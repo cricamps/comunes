@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Pagos - Admin</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="dashboard-admin.html">
+                <i class="bi bi-shield-check"></i> Panel Admin
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard-admin.html">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestionar-gastos.html">
+                            <i class="bi bi-cash-stack"></i> Gastos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestionar-residentes.html">
+                            <i class="bi bi-people"></i> Residentes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="registrar-pagos.html">
+                            <i class="bi bi-credit-card"></i> Registrar Pagos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="solicitudes.html">
+                            <i class="bi bi-envelope-check"></i> Solicitudes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reportes.html">
+                            <i class="bi bi-file-earmark-text"></i> Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuracion.html">
+                            <i class="bi bi-gear"></i> Configuración
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="nombreUsuario">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="../perfil.html"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="btnCerrarSesion"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="fw-bold mb-0"><i class="bi bi-credit-card"></i> Registrar Pagos</h1>
+                <p class="text-muted mb-0">Registra los pagos realizados por los residentes</p>
+            </div>
+        </div>
+
+        <!-- FORMULARIO REGISTRO DE PAGO -->
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Nuevo Pago</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formRegistrarPago">
+                            <div class="row">
+                                <!-- RESIDENTE -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="residente" class="form-label fw-bold">
+                                        <i class="bi bi-person"></i> Residente *
+                                    </label>
+                                    <select class="form-select form-select-lg" id="residente" required>
+                                        <option value="">Seleccione un residente...</option>
+                                    </select>
+                                    <div class="invalid-feedback" id="residenteError"></div>
+                                </div>
+
+                                <!-- MES -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="mes" class="form-label fw-bold">
+                                        <i class="bi bi-calendar"></i> Mes de Pago *
+                                    </label>
+                                    <input type="month" class="form-control form-control-lg" id="mes" required>
+                                    <div class="invalid-feedback" id="mesError"></div>
+                                </div>
+
+                                <!-- MONTO -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="monto" class="form-label fw-bold">
+                                        <i class="bi bi-cash"></i> Monto *
+                                    </label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="monto" placeholder="0" min="0" required>
+                                    </div>
+                                    <div class="invalid-feedback" id="montoError"></div>
+                                    <small class="text-muted">Monto sugerido por casa: <strong id="montoSugerido">$0</strong></small>
+                                </div>
+
+                                <!-- FECHA DE PAGO -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="fechaPago" class="form-label fw-bold">
+                                        <i class="bi bi-calendar-check"></i> Fecha de Pago *
+                                    </label>
+                                    <input type="datetime-local" class="form-control form-control-lg" id="fechaPago" required>
+                                    <div class="invalid-feedback" id="fechaPagoError"></div>
+                                </div>
+
+                                <!-- MÉTODO DE PAGO -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="metodoPago" class="form-label fw-bold">
+                                        <i class="bi bi-wallet2"></i> Método de Pago *
+                                    </label>
+                                    <select class="form-select form-select-lg" id="metodoPago" required>
+                                        <option value="">Seleccione método...</option>
+                                        <option value="efectivo">Efectivo</option>
+                                        <option value="transferencia">Transferencia</option>
+                                        <option value="deposito">Depósito</option>
+                                        <option value="cheque">Cheque</option>
+                                    </select>
+                                    <div class="invalid-feedback" id="metodoPagoError"></div>
+                                </div>
+
+                                <!-- COMPROBANTE -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="comprobante" class="form-label fw-bold">
+                                        <i class="bi bi-file-text"></i> N° Comprobante
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" id="comprobante" placeholder="Ej: TRF-20251105-001">
+                                    <small class="text-muted">Opcional</small>
+                                </div>
+
+                                <!-- OBSERVACIONES -->
+                                <div class="col-12 mb-3">
+                                    <label for="observaciones" class="form-label fw-bold">
+                                        <i class="bi bi-chat-text"></i> Observaciones
+                                    </label>
+                                    <textarea class="form-control" id="observaciones" rows="3" placeholder="Comentarios adicionales..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="reset" class="btn btn-secondary btn-lg">
+                                    <i class="bi bi-x-circle"></i> Limpiar
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-check-circle"></i> Registrar Pago
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESUMEN -->
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm border-primary mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0"><i class="bi bi-info-circle"></i> Información</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <small class="text-muted">Total Gastos del Mes</small>
+                            <h3 class="text-primary mb-0" id="totalGastosMes">$0</h3>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted">Monto por Casa (÷13)</small>
+                            <h4 class="text-primary mb-0" id="montoPorCasa">$0</h4>
+                        </div>
+                        <hr>
+                        <div class="mb-2">
+                            <small class="text-muted">Total Pagado</small>
+                            <h5 class="text-success mb-0" id="totalPagado">$0</h5>
+                        </div>
+                        <div>
+                            <small class="text-muted">Pendiente por Cobrar</small>
+                            <h5 class="text-danger mb-0" id="pendientePorCobrar">$0</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="bi bi-lightbulb"></i> <strong>Consejos:</strong>
+                    <ul class="mb-0 mt-2 small">
+                        <li>Verifica el método de pago antes de registrar</li>
+                        <li>Guarda el comprobante físico o digital</li>
+                        <li>Puedes registrar pagos de meses anteriores</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTA DE PAGOS RECIENTES -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Últimos Pagos Registrados</h5>
+                <span class="badge bg-light text-dark" id="cantidadPagos">0</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Residente</th>
+                                <th>Casa</th>
+                                <th>Mes</th>
+                                <th>Monto</th>
+                                <th>Método</th>
+                                <th>Fecha Pago</th>
+                                <th>Registrado Por</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaPagos">
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    No hay pagos registrados
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="../js/script.js"></script>
+    <script src="../js/datos-iniciales.js"></script>
+    <script src="../js/admin/registrar-pagos.js"></script>
+</body>
+</html>

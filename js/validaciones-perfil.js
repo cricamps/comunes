@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar si hay sesión activa
     verificarSesion();
     
+    // Cargar menú correcto según tipo de usuario
+    cargarMenuNavegacion();
+    
     // Cargar datos del usuario
     cargarDatosUsuario();
     
@@ -117,11 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ACCIONES
     // ===================================
     
-    // Cerrar sesión
-    document.getElementById('btnCerrarSesion').addEventListener('click', function(e) {
-        e.preventDefault();
-        cerrarSesion();
-    });
+    // Nota: El botón cerrar sesión se maneja en cargarMenuNavegacion()
     
     // Eliminar cuenta
     document.getElementById('btnEliminarCuenta').addEventListener('click', function() {
@@ -151,6 +150,116 @@ function verificarSesion() {
 }
 
 /**
+ * Carga el menú de navegación correcto según el tipo de usuario
+ */
+function cargarMenuNavegacion() {
+    const sesion = window.validacionesComunes.obtenerDeStorage('sesionActual');
+    
+    if (!sesion) return;
+    
+    const navbar = document.getElementById('navbarPrincipal');
+    const brandLink = document.getElementById('brandLink');
+    const brandText = document.getElementById('brandText');
+    const menuItems = document.getElementById('menuItems');
+    
+    if (sesion.tipo === 'administrador') {
+        // Menú para administrador
+        navbar.classList.remove('bg-primary');
+        navbar.classList.add('bg-success');
+        
+        brandLink.href = 'vista_admin/dashboard-admin.html';
+        brandText.innerHTML = '<i class="bi bi-shield-check"></i> Panel Admin';
+        
+        menuItems.innerHTML = `
+            <li class="nav-item">
+                <a class="nav-link" href="vista_admin/dashboard-admin.html">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_admin/gestionar-gastos.html">
+                    <i class="bi bi-cash-stack"></i> Gastos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_admin/gestionar-residentes.html">
+                    <i class="bi bi-people"></i> Residentes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_admin/registrar-pagos.html">
+                    <i class="bi bi-credit-card"></i> Registrar Pagos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_admin/solicitudes.html">
+                    <i class="bi bi-envelope-check"></i> Solicitudes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_admin/reportes.html">
+                    <i class="bi bi-file-earmark-text"></i> Reportes
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i> ${sesion.nombre}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item active" href="perfil.html"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" id="btnCerrarSesion"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                </ul>
+            </li>
+        `;
+    } else {
+        // Menú para residente
+        navbar.classList.add('bg-primary');
+        
+        brandLink.href = 'vista_usuario/dashboard-usuario.html';
+        
+        menuItems.innerHTML = `
+            <li class="nav-item">
+                <a class="nav-link" href="vista_usuario/dashboard-usuario.html">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_usuario/mis-gastos.html">
+                    <i class="bi bi-receipt"></i> Mis Gastos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_usuario/historial-pagos.html">
+                    <i class="bi bi-clock-history"></i> Historial
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="vista_usuario/realizar-pago.html">
+                    <i class="bi bi-credit-card"></i> Pagar
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i> ${sesion.nombre}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item active" href="perfil.html"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" id="btnCerrarSesion"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                </ul>
+            </li>
+        `;
+    }
+    
+    // Re-agregar event listener al botón de cerrar sesión
+    document.getElementById('btnCerrarSesion').addEventListener('click', function(e) {
+        e.preventDefault();
+        cerrarSesion();
+    });
+}
+
+/**
  * Carga los datos del usuario actual
  */
 function cargarDatosUsuario() {
@@ -172,10 +281,15 @@ function cargarDatosUsuario() {
         document.getElementById('email').value = usuario.email || '';
         document.getElementById('telefono').value = usuario.telefono || '';
         
-        // Información de vivienda
-        if (usuario.casa) {
-            document.getElementById('pasajeDisplay').textContent = `Pasaje ${usuario.casa.pasaje}`;
-            document.getElementById('casaDisplay').textContent = `Casa ${usuario.casa.letra}`;
+        // Información de vivienda (solo para residentes)
+        const infoVivienda = document.getElementById('infoVivienda');
+        if (sesion.tipo === 'residente' && usuario.pasaje && usuario.casa) {
+            infoVivienda.style.display = 'block';
+            document.getElementById('pasajeDisplay').textContent = `Pasaje ${usuario.pasaje}`;
+            document.getElementById('casaDisplay').textContent = `Casa ${usuario.casa}`;
+        } else {
+            // Ocultar para administradores o residentes sin casa asignada
+            infoVivienda.style.display = 'none';
         }
         
         // Información de cuenta

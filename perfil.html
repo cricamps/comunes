@@ -16,11 +16,11 @@
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <!-- NAVEGACIÓN -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+    <!-- NAVEGACIÓN - Se cargará dinámicamente -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow" id="navbarPrincipal">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="bi bi-building"></i> Gastos Comunes
+            <a class="navbar-brand fw-bold" href="#" id="brandLink">
+                <i class="bi bi-building"></i> <span id="brandText">Gastos Comunes</span>
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -28,17 +28,8 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">
-                            <i class="bi bi-house-door"></i> Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="perfil.html">
-                            <i class="bi bi-person-circle"></i> Mi Perfil
-                        </a>
-                    </li>
+                <!-- Menú se cargará dinámicamente según el tipo de usuario -->
+                <ul class="navbar-nav ms-auto" id="menuItems">
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="btnCerrarSesion">
                             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
@@ -140,8 +131,8 @@
                                 </div>
                             </div>
 
-                            <!-- INFORMACIÓN DE VIVIENDA (NO EDITABLE) -->
-                            <div class="card bg-light mb-3">
+                            <!-- INFORMACIÓN DE VIVIENDA (SOLO RESIDENTES) -->
+                            <div class="card bg-light mb-3" id="infoVivienda" style="display: none;">
                                 <div class="card-body">
                                     <h6 class="fw-bold mb-3">
                                         <i class="bi bi-house-door"></i> Información de Vivienda

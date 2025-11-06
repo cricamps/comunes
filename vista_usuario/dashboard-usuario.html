@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Usuario - Gastos Comunes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="dashboard-usuario.html"><i class="bi bi-building"></i> Gastos Comunes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="dashboard-usuario.html"><i class="bi bi-speedometer2"></i> Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mis-gastos.html"><i class="bi bi-receipt"></i> Mis Gastos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="historial-pagos.html"><i class="bi bi-clock-history"></i> Historial</a></li>
+                    <li class="nav-item"><a class="nav-link" href="realizar-pago.html"><i class="bi bi-credit-card"></i> Pagar</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="nombreUsuario">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="../perfil.html"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="btnCerrarSesion"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="fw-bold mb-0">Bienvenido/a, <span id="nombreCompleto">Usuario</span></h1>
+                <p class="text-muted mb-0">Gestiona tus gastos comunes</p>
+            </div>
+        </div>
+
+        <div class="alert alert-info mb-4">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-house-door-fill fs-2 me-3"></i>
+                <div><strong>Tu Vivienda:</strong> Pasaje <span id="pasajeUsuario">-</span>, Casa <span id="casaUsuario">-</span></div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-4">
+                <div class="card stat-card success border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="stat-icon bg-success text-white me-3"><i class="bi bi-cash-stack"></i></div>
+                        <div>
+                            <h6 class="text-muted mb-1">Gasto del Mes</h6>
+                            <h2 class="fw-bold mb-0" id="gastoMes">$0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card stat-card warning border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="stat-icon bg-warning text-white me-3"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                        <div>
+                            <h6 class="text-muted mb-1">Estado</h6>
+                            <h2 class="fw-bold mb-0" id="estadoPago">-</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card stat-card info border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="stat-icon bg-info text-white me-3"><i class="bi bi-calendar-check"></i></div>
+                        <div>
+                            <h6 class="text-muted mb-1">Último Pago</h6>
+                            <h2 class="fw-bold mb-0 small" id="ultimoPago">-</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-12 col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white"><h5 class="mb-0"><i class="bi bi-lightning-fill text-warning"></i> Acciones Rápidas</h5></div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <a href="realizar-pago.html" class="btn btn-success w-100 p-3">
+                                    <i class="bi bi-credit-card fs-4"></i>
+                                    <div class="mt-2"><strong>Realizar Pago</strong></div>
+                                    <small>Paga tus gastos comunes</small>
+                                </a>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <a href="mis-gastos.html" class="btn btn-primary w-100 p-3">
+                                    <i class="bi bi-receipt fs-4"></i>
+                                    <div class="mt-2"><strong>Ver Mis Gastos</strong></div>
+                                    <small>Revisa tus gastos</small>
+                                </a>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <a href="historial-pagos.html" class="btn btn-info w-100 p-3">
+                                    <i class="bi bi-clock-history fs-4"></i>
+                                    <div class="mt-2"><strong>Historial de Pagos</strong></div>
+                                    <small>Consulta tu historial</small>
+                                </a>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <a href="../perfil.html" class="btn btn-secondary w-100 p-3">
+                                    <i class="bi bi-person fs-4"></i>
+                                    <div class="mt-2"><strong>Mi Perfil</strong></div>
+                                    <small>Actualiza tus datos</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white"><h5 class="mb-0"><i class="bi bi-info-circle"></i> Información</h5></div>
+                    <div class="card-body">
+                        <p><strong>Total Casas:</strong> 13</p>
+                        <p><strong>Pasaje 8651:</strong> 6 casas</p>
+                        <p class="mb-0"><strong>Pasaje 8707:</strong> 7 casas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/usuario/dashboard-usuario.js"></script>
+</body>
+</html>

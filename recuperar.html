@@ -39,11 +39,6 @@
                             <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="registro.html">
-                            <i class="bi bi-person-plus"></i> Registrarse
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -52,19 +47,18 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
-                <!-- PASO 1: SOLICITAR EMAIL -->
-                <div id="paso1" class="card shadow-lg border-0 fade-in">
+            <div class="col-12 col-md-8 col-lg-5">
+                <div class="card shadow-lg border-0 fade-in">
                     <div class="card-body p-5">
                         <div class="text-center mb-4">
                             <i class="bi bi-key fs-1 text-warning"></i>
                             <h2 class="fw-bold mt-3">Recuperar Contraseña</h2>
-                            <p class="text-muted">Ingresa tu correo electrónico y te enviaremos un código de verificación</p>
+                            <p class="text-muted">Ingresa tu correo electrónico y te enviaremos un código</p>
                         </div>
 
-                        <form id="formRecuperar" novalidate>
-                            <!-- EMAIL -->
-                            <div class="mb-4">
+                        <!-- PASO 1: SOLICITAR EMAIL -->
+                        <form id="formEmail" novalidate style="display: block;">
+                            <div class="mb-3">
                                 <label for="email" class="form-label fw-bold">
                                     <i class="bi bi-envelope"></i> Correo Electrónico
                                 </label>
@@ -72,41 +66,30 @@
                                     type="email" 
                                     class="form-control form-control-lg" 
                                     id="email" 
-                                    name="email"
                                     placeholder="tu@email.com"
                                     required>
                                 <div class="invalid-feedback" id="emailError"></div>
-                                <small class="text-muted">Usaremos el correo registrado en tu cuenta</small>
                             </div>
 
-                            <!-- BOTÓN ENVIAR CÓDIGO -->
                             <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-                                <i class="bi bi-send"></i> Enviar Código de Verificación
+                                <i class="bi bi-send"></i> Enviar Código
                             </button>
 
-                            <!-- LINKS ADICIONALES -->
                             <div class="text-center">
                                 <a href="login.html" class="text-decoration-none">
-                                    <small><i class="bi bi-arrow-left"></i> Volver al inicio de sesión</small>
+                                    <small><i class="bi bi-arrow-left"></i> Volver</small>
                                 </a>
                             </div>
                         </form>
-                    </div>
-                </div>
 
-                <!-- PASO 2: INGRESAR CÓDIGO -->
-                <div id="paso2" class="card shadow-lg border-0 fade-in d-none">
-                    <div class="card-body p-5">
-                        <div class="text-center mb-4">
-                            <i class="bi bi-shield-check fs-1 text-success"></i>
-                            <h2 class="fw-bold mt-3">Verificar Código</h2>
-                            <p class="text-muted">Hemos enviado un código de 6 dígitos a tu correo electrónico</p>
-                            <p class="fw-bold text-primary" id="emailMostrado"></p>
-                        </div>
+                        <!-- PASO 2: INGRESAR CÓDIGO -->
+                        <form id="formCodigo" novalidate style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> 
+                                Hemos enviado un código de 6 dígitos a <strong id="emailDisplay"></strong>
+                            </div>
 
-                        <form id="formVerificarCodigo" novalidate>
-                            <!-- CÓDIGO DE VERIFICACIÓN -->
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <label for="codigo" class="form-label fw-bold">
                                     <i class="bi bi-123"></i> Código de Verificación
                                 </label>
@@ -114,138 +97,104 @@
                                     type="text" 
                                     class="form-control form-control-lg text-center" 
                                     id="codigo" 
-                                    name="codigo"
-                                    placeholder="000000"
+                                    placeholder="123456"
                                     maxlength="6"
-                                    style="font-size: 2rem; letter-spacing: 10px;"
                                     required>
                                 <div class="invalid-feedback" id="codigoError"></div>
-                                <small class="text-muted">Ingresa el código de 6 dígitos</small>
                             </div>
 
-                            <!-- CÓDIGO DE PRUEBA -->
-                            <div class="alert alert-info">
-                                <i class="bi bi-info-circle"></i>
-                                <strong>Código de prueba:</strong> 123456
-                            </div>
-
-                            <!-- BOTÓN VERIFICAR -->
-                            <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
                                 <i class="bi bi-check-circle"></i> Verificar Código
                             </button>
 
-                            <!-- REENVIAR CÓDIGO -->
                             <div class="text-center">
-                                <button type="button" id="btnReenviar" class="btn btn-link text-decoration-none" disabled>
-                                    <small>Reenviar código en <span id="countdown">60</span> segundos</small>
+                                <button type="button" class="btn btn-link btn-sm" id="btnReenviarCodigo">
+                                    <i class="bi bi-arrow-clockwise"></i> Reenviar código
                                 </button>
-                            </div>
-
-                            <!-- VOLVER ATRÁS -->
-                            <div class="text-center mt-3">
-                                <button type="button" id="btnVolverPaso1" class="btn btn-link text-decoration-none">
-                                    <small><i class="bi bi-arrow-left"></i> Cambiar correo electrónico</small>
-                                </button>
+                                <br>
+                                <a href="login.html" class="text-decoration-none">
+                                    <small><i class="bi bi-arrow-left"></i> Volver</small>
+                                </a>
                             </div>
                         </form>
-                    </div>
-                </div>
 
-                <!-- PASO 3: NUEVA CONTRASEÑA -->
-                <div id="paso3" class="card shadow-lg border-0 fade-in d-none">
-                    <div class="card-body p-5">
-                        <div class="text-center mb-4">
-                            <i class="bi bi-lock-fill fs-1 text-primary"></i>
-                            <h2 class="fw-bold mt-3">Nueva Contraseña</h2>
-                            <p class="text-muted">Crea una contraseña segura para tu cuenta</p>
-                        </div>
+                        <!-- PASO 3: NUEVA CONTRASEÑA -->
+                        <form id="formPassword" novalidate style="display: none;">
+                            <div class="alert alert-success">
+                                <i class="bi bi-check-circle"></i> 
+                                Código verificado correctamente
+                            </div>
 
-                        <form id="formNuevaPassword" novalidate>
                             <!-- NUEVA CONTRASEÑA -->
                             <div class="mb-3">
-                                <label for="nuevaPassword" class="form-label fw-bold">
-                                    <i class="bi bi-lock"></i> Nueva Contraseña *
+                                <label for="passwordNueva" class="form-label fw-bold">
+                                    <i class="bi bi-lock-fill"></i> Nueva Contraseña
                                 </label>
                                 <div class="input-group">
                                     <input 
                                         type="password" 
                                         class="form-control form-control-lg" 
-                                        id="nuevaPassword" 
-                                        name="nuevaPassword"
+                                        id="passwordNueva" 
                                         placeholder="••••••••"
                                         required>
-                                    <button class="btn btn-outline-secondary" type="button" id="toggleNuevaPassword">
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordNueva">
                                         <i class="bi bi-eye" id="eyeIconNueva"></i>
                                     </button>
                                 </div>
-                                <div class="invalid-feedback" id="nuevaPasswordError"></div>
+                                <div class="invalid-feedback" id="passwordNuevaError"></div>
                             </div>
 
                             <!-- CONFIRMAR CONTRASEÑA -->
-                            <div class="mb-4">
-                                <label for="confirmarPassword" class="form-label fw-bold">
-                                    <i class="bi bi-lock-fill"></i> Confirmar Contraseña *
+                            <div class="mb-3">
+                                <label for="passwordConfirmar" class="form-label fw-bold">
+                                    <i class="bi bi-lock-fill"></i> Confirmar Contraseña
                                 </label>
                                 <div class="input-group">
                                     <input 
                                         type="password" 
                                         class="form-control form-control-lg" 
-                                        id="confirmarPassword" 
-                                        name="confirmarPassword"
+                                        id="passwordConfirmar" 
                                         placeholder="••••••••"
                                         required>
-                                    <button class="btn btn-outline-secondary" type="button" id="toggleConfirmarPassword">
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmar">
                                         <i class="bi bi-eye" id="eyeIconConfirmar"></i>
                                     </button>
                                 </div>
-                                <div class="invalid-feedback" id="confirmarPasswordError"></div>
+                                <div class="invalid-feedback" id="passwordConfirmarError"></div>
                             </div>
 
-                            <!-- REQUISITOS DE CONTRASEÑA -->
-                            <div class="card bg-light mb-4">
+                            <!-- REQUISITOS -->
+                            <div class="card bg-light mb-3">
                                 <div class="card-body">
-                                    <h6 class="fw-bold mb-3">
-                                        <i class="bi bi-shield-check"></i> Requisitos de seguridad:
-                                    </h6>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <small id="req-longitud" class="text-muted d-block mb-1">
-                                                <i class="bi bi-circle"></i> 8-20 caracteres
-                                            </small>
-                                            <small id="req-mayuscula" class="text-muted d-block mb-1">
-                                                <i class="bi bi-circle"></i> Una mayúscula
-                                            </small>
-                                            <small id="req-minuscula" class="text-muted d-block mb-1">
-                                                <i class="bi bi-circle"></i> Una minúscula
-                                            </small>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <small id="req-numero" class="text-muted d-block mb-1">
-                                                <i class="bi bi-circle"></i> Un número
-                                            </small>
-                                            <small id="req-especial" class="text-muted d-block mb-1">
-                                                <i class="bi bi-circle"></i> Un carácter especial
-                                            </small>
-                                        </div>
-                                    </div>
+                                    <h6 class="fw-bold mb-2">Requisitos de seguridad:</h6>
+                                    <small id="req-longitud" class="text-muted d-block mb-1">
+                                        <i class="bi bi-circle"></i> 8-20 caracteres
+                                    </small>
+                                    <small id="req-mayuscula" class="text-muted d-block mb-1">
+                                        <i class="bi bi-circle"></i> Una mayúscula
+                                    </small>
+                                    <small id="req-minuscula" class="text-muted d-block mb-1">
+                                        <i class="bi bi-circle"></i> Una minúscula
+                                    </small>
+                                    <small id="req-numero" class="text-muted d-block mb-1">
+                                        <i class="bi bi-circle"></i> Un número
+                                    </small>
+                                    <small id="req-especial" class="text-muted d-block mb-1">
+                                        <i class="bi bi-circle"></i> Un carácter especial
+                                    </small>
                                 </div>
                             </div>
 
-                            <!-- BOTÓN CAMBIAR CONTRASEÑA -->
-                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                            <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
                                 <i class="bi bi-check-circle"></i> Cambiar Contraseña
                             </button>
-                        </form>
-                    </div>
-                </div>
 
-                <!-- INFORMACIÓN ADICIONAL -->
-                <div class="card mt-4 border-0 bg-light">
-                    <div class="card-body text-center">
-                        <p class="mb-0 text-muted">
-                            <i class="bi bi-info-circle"></i> 
-                            <small>Si tienes problemas, contacta al administrador del sistema</small>
-                        </p>
+                            <div class="text-center">
+                                <a href="login.html" class="text-decoration-none">
+                                    <small><i class="bi bi-arrow-left"></i> Volver</small>
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -263,8 +212,7 @@
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <a href="index.html" class="text-white text-decoration-none me-3">Inicio</a>
-                    <a href="login.html" class="text-white text-decoration-none me-3">Iniciar Sesión</a>
-                    <a href="registro.html" class="text-white text-decoration-none">Registrarse</a>
+                    <a href="login.html" class="text-white text-decoration-none">Iniciar Sesión</a>
                 </div>
             </div>
         </div>

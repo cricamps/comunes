@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestionar Gastos Comunes - Administrador">
+    <title>Gestionar Gastos - Gastos Comunes</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="dashboard-admin.html">
+                <i class="bi bi-building"></i> Gastos Comunes - Admin
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard-admin.html">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="gestionar-gastos.html">
+                            <i class="bi bi-receipt"></i> Gestionar Gastos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestionar-residentes.html">
+                            <i class="bi bi-people"></i> Residentes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registrar-pagos.html">
+                            <i class="bi bi-credit-card"></i> Registrar Pagos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="solicitudes.html">
+                            <i class="bi bi-envelope-check"></i> Solicitudes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reportes.html">
+                            <i class="bi bi-file-earmark-bar-graph"></i> Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="nombreAdmin">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="../perfil.html"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="btnCerrarSesion"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container-fluid my-4">
+        <!-- HEADER -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="mb-2 mb-md-0">
+                        <h1 class="fw-bold mb-0">Gestionar Gastos Comunes</h1>
+                        <p class="text-muted mb-0">Administra los gastos de la comunidad</p>
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoGasto">
+                        <i class="bi bi-plus-circle"></i> Nuevo Gasto
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label fw-bold">
+                            <i class="bi bi-search"></i> Buscar
+                        </label>
+                        <input type="text" class="form-control" id="inputBuscar" placeholder="Buscar por concepto...">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="bi bi-tag"></i> Categoría
+                        </label>
+                        <select class="form-select" id="selectCategoria">
+                            <option value="">Todas las categorías</option>
+                            <option value="Mantención">Mantención</option>
+                            <option value="Servicios Básicos">Servicios Básicos</option>
+                            <option value="Seguridad">Seguridad</option>
+                            <option value="Limpieza">Limpieza</option>
+                            <option value="Reparaciones">Reparaciones</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="bi bi-circle-fill"></i> Estado
+                        </label>
+                        <select class="form-select" id="selectEstado">
+                            <option value="">Todos los estados</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Pagado">Pagado</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Vencido">Vencido</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label fw-bold d-block">&nbsp;</label>
+                        <button class="btn btn-secondary w-100" id="btnLimpiarFiltros">
+                            <i class="bi bi-x-circle"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA DE GASTOS -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-ul"></i> Lista de Gastos Comunes
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Concepto</th>
+                                <th>Categoría</th>
+                                <th>Monto</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaGastos">
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Cargando...</span>
+                                    </div>
+                                    <p class="mt-3 mb-0">Cargando gastos...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL NUEVO/EDITAR GASTO -->
+    <div class="modal fade" id="modalNuevoGasto" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle"></i> <span id="tituloModal">Nuevo Gasto Común</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formGasto" novalidate>
+                        <input type="hidden" id="gastoId">
+                        
+                        <div class="row">
+                            <!-- CONCEPTO -->
+                            <div class="col-md-8 mb-3">
+                                <label for="concepto" class="form-label fw-bold">
+                                    <i class="bi bi-receipt"></i> Concepto *
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="concepto" 
+                                    placeholder="Ej: Cuenta de Agua"
+                                    required>
+                                <div class="invalid-feedback" id="conceptoError"></div>
+                            </div>
+
+                            <!-- CATEGORÍA -->
+                            <div class="col-md-4 mb-3">
+                                <label for="categoria" class="form-label fw-bold">
+                                    <i class="bi bi-tag"></i> Categoría *
+                                </label>
+                                <select class="form-select" id="categoria" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Mantención">Mantención</option>
+                                    <option value="Servicios Básicos">Servicios Básicos</option>
+                                    <option value="Seguridad">Seguridad</option>
+                                    <option value="Limpieza">Limpieza</option>
+                                    <option value="Reparaciones">Reparaciones</option>
+                                    <option value="Otros">Otros</option>
+                                </select>
+                                <div class="invalid-feedback" id="categoriaError"></div>
+                            </div>
+
+                            <!-- DESCRIPCIÓN -->
+                            <div class="col-12 mb-3">
+                                <label for="descripcion" class="form-label fw-bold">
+                                    <i class="bi bi-text-paragraph"></i> Descripción
+                                </label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="descripcion" 
+                                    rows="3"
+                                    placeholder="Descripción detallada del gasto..."></textarea>
+                            </div>
+
+                            <!-- MONTO -->
+                            <div class="col-md-6 mb-3">
+                                <label for="monto" class="form-label fw-bold">
+                                    <i class="bi bi-cash"></i> Monto Total ($) *
+                                </label>
+                                <input 
+                                    type="number" 
+                                    class="form-control" 
+                                    id="monto" 
+                                    placeholder="0"
+                                    min="0"
+                                    step="1000"
+                                    required>
+                                <div class="invalid-feedback" id="montoError"></div>
+                                <small class="text-muted">Monto total del gasto</small>
+                            </div>
+
+                            <!-- FECHA -->
+                            <div class="col-md-6 mb-3">
+                                <label for="fecha" class="form-label fw-bold">
+                                    <i class="bi bi-calendar"></i> Fecha *
+                                </label>
+                                <input 
+                                    type="date" 
+                                    class="form-control" 
+                                    id="fecha" 
+                                    required>
+                                <div class="invalid-feedback" id="fechaError"></div>
+                            </div>
+
+                            <!-- ESTADO -->
+                            <div class="col-md-6 mb-3">
+                                <label for="estado" class="form-label fw-bold">
+                                    <i class="bi bi-circle-fill"></i> Estado *
+                                </label>
+                                <select class="form-select" id="estado" required>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Pagado">Pagado</option>
+                                    <option value="Vencido">Vencido</option>
+                                </select>
+                            </div>
+
+                            <!-- MONTO POR CASA -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-calculator"></i> Monto por Casa
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control bg-light" 
+                                    id="montoPorCasa" 
+                                    readonly>
+                                <small class="text-muted">Se divide entre 13 casas</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarGasto">
+                        <i class="bi bi-check-circle"></i> Guardar Gasto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ELIMINAR GASTO -->
+    <div class="modal fade" id="modalEliminarGasto" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>¿Estás seguro de que deseas eliminar este gasto?</strong></p>
+                    <p class="text-muted mb-0" id="nombreGastoEliminar"></p>
+                    <input type="hidden" id="idGastoEliminar">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                        <i class="bi bi-trash"></i> Sí, Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="../js/script.js"></script>
+    <script src="../js/admin/gestionar-gastos.js"></script>
+</body>
+</html>

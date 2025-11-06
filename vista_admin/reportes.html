@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Gastos Comunes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="dashboard-admin.html">
+                <i class="bi bi-building"></i> Gastos Comunes - Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard-admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gestionar-gastos.html"><i class="bi bi-receipt"></i> Gestionar Gastos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gestionar-residentes.html"><i class="bi bi-people"></i> Residentes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registrar-pagos.html"><i class="bi bi-credit-card"></i> Registrar Pagos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="solicitudes.html"><i class="bi bi-envelope-check"></i> Solicitudes</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="reportes.html"><i class="bi bi-file-earmark-bar-graph"></i> Reportes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="configuracion.html"><i class="bi bi-gear"></i> Configuración</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="nombreAdmin">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="../perfil.html"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="btnCerrarSesion"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid my-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="fw-bold mb-0">Reportes y Estadísticas</h1>
+                <p class="text-muted mb-0">Genera reportes detallados de la comunidad</p>
+            </div>
+        </div>
+
+        <!-- GENERADORES DE REPORTES - CLICKEABLES -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card shadow-sm h-100 hover-card" style="cursor: pointer;" onclick="verVistaPrevia('gastos')">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-receipt-cutoff fs-1 text-primary mb-3"></i>
+                        <h5 class="fw-bold">Reporte de Gastos</h5>
+                        <p class="text-muted mb-0">Gastos del mes actual</p>
+                        <small class="text-primary">
+                            <i class="bi bi-eye"></i> Click para vista previa
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card shadow-sm h-100 hover-card" style="cursor: pointer;" onclick="verVistaPrevia('pagos')">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-cash-stack fs-1 text-success mb-3"></i>
+                        <h5 class="fw-bold">Reporte de Pagos</h5>
+                        <p class="text-muted mb-0">Pagos realizados</p>
+                        <small class="text-success">
+                            <i class="bi bi-eye"></i> Click para vista previa
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card shadow-sm h-100 hover-card" style="cursor: pointer;" onclick="verVistaPrevia('residentes')">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-people-fill fs-1 text-info mb-3"></i>
+                        <h5 class="fw-bold">Lista de Residentes</h5>
+                        <p class="text-muted mb-0">Todos los residentes</p>
+                        <small class="text-info">
+                            <i class="bi bi-eye"></i> Click para vista previa
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card shadow-sm h-100 hover-card" style="cursor: pointer;" onclick="verVistaPrevia('general')">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-clipboard-data fs-1 text-warning mb-3"></i>
+                        <h5 class="fw-bold">Reporte General</h5>
+                        <p class="text-muted mb-0">Resumen completo</p>
+                        <small class="text-warning">
+                            <i class="bi bi-eye"></i> Click para vista previa
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUMEN DE DATOS -->
+        <div class="row g-4">
+            <div class="col-12 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Resumen Financiero</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Total Gastos del Mes:</strong></span>
+                                <span class="text-danger fw-bold" id="totalGastosMes">$0</span>
+                            </div>
+                        </div>
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Total Recaudado:</strong></span>
+                                <span class="text-success fw-bold" id="totalRecaudado">$0</span>
+                            </div>
+                        </div>
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Pendiente por Cobrar:</strong></span>
+                                <span class="text-warning fw-bold" id="pendienteCobrar">$0</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Balance:</strong></span>
+                                <span class="fw-bold" id="balance">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Estadísticas</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- GRÁFICO DE TORTA -->
+                        <div class="mb-4">
+                            <canvas id="graficoGastos" style="max-height: 300px;"></canvas>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- TASA DE PAGO -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tasa de Pago</span>
+                                <span class="fw-bold" id="tasaPago">0%</span>
+                            </div>
+                            <div class="progress" style="height: 25px;">
+                                <div class="progress-bar bg-success" id="progressTasaPago" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÁREA DE VISTA PREVIA CON BOTÓN DE DESCARGA -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-eye"></i> Vista Previa del Reporte</h5>
+                        <button id="btnDescargarReporte" class="btn btn-primary" style="display: none;" onclick="descargarReporteActual()">
+                            <i class="bi bi-download"></i> Descargar PDF
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="vistaPrevia" class="text-center text-muted py-5">
+                            <i class="bi bi-file-earmark-text fs-1"></i>
+                            <p class="mt-3">Selecciona un reporte para ver la vista previa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jsPDF para generar PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <script src="../js/script.js"></script>
+    <script src="../js/datos-iniciales.js"></script>
+    <script src="../js/admin/reportes.js"></script>
+</body>
+</html>
