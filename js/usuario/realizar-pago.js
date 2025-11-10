@@ -1,4 +1,4 @@
-// REALIZAR PAGO
+// REALIZAR PAGO - VERSIÓN CORREGIDA
 document.addEventListener('DOMContentLoaded', function() {
     verificarSesionUsuario();
     cargarDatosUsuario();
@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function verificarSesionUsuario() {
     const sesion = window.validacionesComunes.obtenerDeStorage('sesionActual');
-    if (!sesion || sesion.tipo !== 'residente') window.location.href = '../login.html';
+    if (!sesion || sesion.tipo !== 'residente') {
+        window.location.href = '../login.html';
+    }
 }
 
 function cargarDatosUsuario() {
@@ -33,9 +35,10 @@ function cargarDatosUsuario() {
         document.getElementById('nombreUsuario').textContent = usuario.nombre.split(' ')[0];
         document.getElementById('nombreResidente').textContent = usuario.nombre;
         
-        if (usuario.casa) {
-            document.getElementById('pasaje').textContent = usuario.casa.pasaje;
-            document.getElementById('casa').textContent = usuario.casa.letra;
+        // Corregido: acceder directamente a las propiedades
+        if (usuario.pasaje && usuario.casa) {
+            document.getElementById('pasaje').textContent = usuario.pasaje;
+            document.getElementById('casa').textContent = usuario.casa;
         }
     }
 }
@@ -45,27 +48,34 @@ function cargarResumenPago() {
     const gastos = window.validacionesComunes.obtenerDeStorage('gastos') || [];
     const pagos = window.validacionesComunes.obtenerDeStorage('pagos') || [];
     
-    // Calcular total del mes
-    const fechaActual = new Date();
-    const gastosMes = gastos.filter(g => {
-        const fecha = new Date(g.fecha);
-        return fecha.getMonth() === fechaActual.getMonth() && 
-               fecha.getFullYear() === fechaActual.getFullYear();
-    });
-    
-    const totalGastos = gastosMes.reduce((sum, g) => sum + parseFloat(g.monto), 0);
-    const tuParte = totalGastos / 13;
+    // Calcular total de gastos aprobados
+    const gastosAprobados = gastos.filter(g => g.estado === 'aprobado');
+    const totalGastos = gastosAprobados.reduce((sum, g) => sum + parseFloat(g.monto || 0), 0);
+    const tuParte = Math.round(totalGastos / 13);
     
     // Mostrar información
+    const fechaActual = new Date();
     document.getElementById('periodo').textContent = fechaActual.toLocaleDateString('es-CL', { 
         month: 'long', 
         year: 'numeric' 
+    }).replace(/^\w/, (c) => c.toUpperCase());
+    
+    document.getElementById('fechaActual').textContent = fechaActual.toLocaleDateString('es-CL', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
     });
-    document.getElementById('fechaActual').textContent = fechaActual.toLocaleDateString('es-CL');
+    
     document.getElementById('totalPagar').textContent = formatearMoneda(tuParte);
     
-    // Verificar si ya pagó
-    const yaPago = pagos.some(p => p.email === sesion.email);
+    // Verificar si ya pagó este mes
+    const mesActual = new Date().toISOString().slice(0, 7); // YYYY-MM
+    const yaPago = pagos.some(p => 
+        p.email === sesion.email && 
+        p.mes === mesActual &&
+        p.estado === 'confirmado'
+    );
+    
     const estadoDiv = document.getElementById('estadoPago');
     const formCard = document.getElementById('cardFormulario');
     
@@ -98,27 +108,33 @@ function procesarPago(e) {
     const usuarios = window.validacionesComunes.obtenerDeStorage('usuarios') || [];
     const usuario = usuarios.find(u => u.email === sesion.email);
     
-    const gastos = window.validacionesComunes.obtenerDeStorage('gastos') || [];
-    const gastosMes = gastos.filter(g => {
-        const fecha = new Date(g.fecha);
-        const hoy = new Date();
-        return fecha.getMonth() === hoy.getMonth() && fecha.getFullYear() === hoy.getFullYear();
-    });
+    if (!usuario) {
+        alert('Error: Usuario no encontrado');
+        return;
+    }
     
-    const totalGastos = gastosMes.reduce((sum, g) => sum + parseFloat(g.monto), 0);
-    const monto = totalGastos / 13;
+    // Calcular monto
+    const gastos = window.validacionesComunes.obtenerDeStorage('gastos') || [];
+    const gastosAprobados = gastos.filter(g => g.estado === 'aprobado');
+    const totalGastos = gastosAprobados.reduce((sum, g) => sum + parseFloat(g.monto || 0), 0);
+    const monto = Math.round(totalGastos / 13);
+    
+    // Crear objeto de pago
+    const mesActual = new Date().toISOString().slice(0, 7); // YYYY-MM
     
     const pago = {
         id: Date.now(),
         email: sesion.email,
         nombreResidente: usuario.nombre,
-        pasaje: usuario.casa.pasaje,
-        casa: usuario.casa.letra,
+        pasaje: usuario.pasaje,
+        casa: usuario.casa,
         monto: monto,
-        fecha: new Date().toISOString(),
+        mes: mesActual,
+        fechaPago: new Date().toISOString(),
         metodoPago: document.getElementById('metodoPago').value,
-        numeroReferencia: document.getElementById('numeroReferencia').value,
-        estado: 'Pagado'
+        numeroReferencia: document.getElementById('numeroReferencia').value || 'N/A',
+        estado: 'confirmado',
+        registradoPor: sesion.email
     };
     
     // Mostrar loading
@@ -135,34 +151,50 @@ function procesarPago(e) {
         window.validacionesComunes.guardarEnStorage('pagos', pagos);
         
         // Mostrar mensaje de éxito
-        window.validacionesComunes.mostrarAlerta('success', 
-            '¡Pago registrado exitosamente! Redirigiendo...', 
-            'main');
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-success alert-dismissible fade show';
+        alerta.innerHTML = `
+            <i class="bi bi-check-circle-fill"></i>
+            <strong>¡Pago registrado exitosamente!</strong> 
+            Redirigiendo al historial...
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.querySelector('main').insertBefore(alerta, document.querySelector('main').firstChild);
         
         // Redirigir al historial
         setTimeout(() => {
             window.location.href = 'historial-pagos.html';
         }, 2000);
-    }, 2000);
+    }, 1500);
 }
 
 function validarFormulario() {
     let valido = true;
     
-    const metodoPago = document.getElementById('metodoPago').value;
-    if (!metodoPago) {
-        window.validacionesComunes.mostrarError('metodoPago', 'Selecciona un método de pago');
+    // Validar método de pago
+    const metodoPago = document.getElementById('metodoPago');
+    const metodoPagoError = document.getElementById('metodoPagoError');
+    
+    if (!metodoPago.value) {
+        metodoPago.classList.add('is-invalid');
+        metodoPagoError.textContent = 'Selecciona un método de pago';
         valido = false;
     } else {
-        window.validacionesComunes.mostrarExito('metodoPago');
+        metodoPago.classList.remove('is-invalid');
+        metodoPago.classList.add('is-valid');
     }
     
-    const confirmar = document.getElementById('confirmar').checked;
-    if (!confirmar) {
-        window.validacionesComunes.mostrarError('confirmar', 'Debes confirmar el pago');
+    // Validar confirmación
+    const confirmar = document.getElementById('confirmar');
+    const confirmarError = document.getElementById('confirmarError');
+    
+    if (!confirmar.checked) {
+        confirmar.classList.add('is-invalid');
+        confirmarError.textContent = 'Debes confirmar el pago';
         valido = false;
     } else {
-        window.validacionesComunes.mostrarExito('confirmar');
+        confirmar.classList.remove('is-invalid');
+        confirmar.classList.add('is-valid');
     }
     
     return valido;
@@ -177,5 +209,12 @@ function cerrarSesion(e) {
 }
 
 function formatearMoneda(monto) {
-    return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(monto);
+    return new Intl.NumberFormat('es-CL', { 
+        style: 'currency', 
+        currency: 'CLP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(monto);
 }
+
+console.log('✅ Realizar Pago cargado correctamente');

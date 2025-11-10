@@ -1,4 +1,4 @@
-// DASHBOARD USUARIO
+// DASHBOARD USUARIO - VERSIÓN MEJORADA
 document.addEventListener('DOMContentLoaded', function() {
     verificarSesionUsuario();
     cargarDatosUsuario();
@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function verificarSesionUsuario() {
     const sesion = window.validacionesComunes.obtenerDeStorage('sesionActual');
-    if (!sesion || sesion.tipo !== 'residente') window.location.href = '../login.html';
+    if (!sesion || sesion.tipo !== 'residente') {
+        window.location.href = '../login.html';
+    }
 }
 
 function cargarDatosUsuario() {
@@ -18,31 +20,70 @@ function cargarDatosUsuario() {
     const usuario = usuarios.find(u => u.email === sesion.email);
     
     if (usuario) {
+        // Nombre del usuario
         document.getElementById('nombreUsuario').textContent = usuario.nombre.split(' ')[0];
         document.getElementById('nombreCompleto').textContent = usuario.nombre;
-        if (usuario.casa) {
-            document.getElementById('pasajeUsuario').textContent = usuario.casa.pasaje;
-            document.getElementById('casaUsuario').textContent = usuario.casa.letra;
+        
+        // Información de la casa
+        if (usuario.pasaje && usuario.casa) {
+            document.getElementById('pasajeUsuario').textContent = usuario.pasaje;
+            document.getElementById('casaUsuario').textContent = usuario.casa;
         }
         
-        // Calcular gasto del mes
+        // Calcular gasto del mes (total gastos / 13 casas)
         const gastos = window.validacionesComunes.obtenerDeStorage('gastos') || [];
-        const totalGastos = gastos.reduce((sum, g) => sum + parseFloat(g.monto), 0);
-        const gastosPorCasa = totalGastos / 13;
+        const gastosAprobados = gastos.filter(g => g.estado === 'aprobado');
+        const totalGastos = gastosAprobados.reduce((sum, g) => sum + parseFloat(g.monto || 0), 0);
+        const gastosPorCasa = Math.round(totalGastos / 13);
+        
+        // Mostrar gasto del mes
         document.getElementById('gastoMes').textContent = formatearMoneda(gastosPorCasa);
         
-        // Verificar estado de pago
+        // Verificar estado de pago del mes actual
+        const mesActual = new Date().toISOString().slice(0, 7); // YYYY-MM
         const pagos = window.validacionesComunes.obtenerDeStorage('pagos') || [];
-        const pagoMes = pagos.find(p => p.email === sesion.email);
+        const pagoMesActual = pagos.find(p => 
+            p.email === sesion.email && 
+            p.mes === mesActual &&
+            p.estado === 'confirmado'
+        );
         
-        if (pagoMes) {
+        if (pagoMesActual) {
+            // Ya pagó este mes
             document.getElementById('estadoPago').textContent = 'Pagado';
             document.getElementById('estadoPago').parentElement.parentElement.querySelector('.stat-icon').classList.remove('bg-warning');
             document.getElementById('estadoPago').parentElement.parentElement.querySelector('.stat-icon').classList.add('bg-success');
-            document.getElementById('ultimoPago').textContent = new Date(pagoMes.fecha).toLocaleDateString('es-CL');
+            document.getElementById('deudaActual').textContent = '$0';
+            document.getElementById('deudaActual').classList.remove('text-danger');
+            document.getElementById('deudaActual').classList.add('text-success');
+            
+            // Mostrar fecha del último pago
+            const fechaPago = new Date(pagoMesActual.fechaPago);
+            document.getElementById('ultimoPago').textContent = fechaPago.toLocaleDateString('es-CL', {
+                day: '2-digit',
+                month: '2-digit', 
+                year: 'numeric'
+            });
         } else {
+            // Aún no ha pagado
             document.getElementById('estadoPago').textContent = 'Pendiente';
-            document.getElementById('ultimoPago').textContent = 'Sin pagos';
+            document.getElementById('deudaActual').textContent = formatearMoneda(gastosPorCasa);
+            
+            // Buscar el último pago (cualquier mes)
+            const pagosPrevios = pagos.filter(p => p.email === sesion.email && p.estado === 'confirmado');
+            if (pagosPrevios.length > 0) {
+                // Ordenar por fecha y obtener el más reciente
+                pagosPrevios.sort((a, b) => new Date(b.fechaPago) - new Date(a.fechaPago));
+                const ultimoPago = pagosPrevios[0];
+                const fechaPago = new Date(ultimoPago.fechaPago);
+                document.getElementById('ultimoPago').textContent = fechaPago.toLocaleDateString('es-CL', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+            } else {
+                document.getElementById('ultimoPago').textContent = 'Sin pagos';
+            }
         }
     }
 }
@@ -56,5 +97,12 @@ function cerrarSesion(e) {
 }
 
 function formatearMoneda(monto) {
-    return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(monto);
+    return new Intl.NumberFormat('es-CL', { 
+        style: 'currency', 
+        currency: 'CLP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(monto);
 }
+
+console.log('✅ Dashboard Usuario cargado correctamente');

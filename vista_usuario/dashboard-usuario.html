@@ -44,10 +44,35 @@
             </div>
         </div>
 
-        <div class="alert alert-info mb-4">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-house-door-fill fs-2 me-3"></i>
-                <div><strong>Tu Vivienda:</strong> Pasaje <span id="pasajeUsuario">-</span>, Casa <span id="casaUsuario">-</span></div>
+        <!-- MI INFORMACIÓN PERSONAL -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Mi Información Personal</h5>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        <i class="bi bi-house-door-fill text-primary" style="font-size: 3rem;"></i>
+                        <div class="mt-2">
+                            <strong>Mi Casa</strong><br>
+                            <span class="text-muted">Pasaje <span id="pasajeUsuario">-</span> - Casa <span id="casaUsuario">-</span></span>
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-3 mb-md-0">
+                        <div class="text-center">
+                            <i class="bi bi-cash-coin text-warning" style="font-size: 2.5rem;"></i>
+                            <div class="mt-2">
+                                <strong>Mi Deuda Actual</strong><br>
+                                <h3 class="text-danger mb-0" id="deudaActual">$0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="realizar-pago.html" class="btn btn-success btn-lg w-100 py-3">
+                            <i class="bi bi-credit-card"></i> Pagar Mis Gastos Comunes
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 

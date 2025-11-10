@@ -17,7 +17,7 @@ function inicializarDatosPrueba() {
         const usuariosPrueba = [
             {
                 // ADMINISTRADOR - TAMBIÉN tiene casa asignada
-                email: 'admin@gastos.cl',
+                email: 'admin@comunes.cl',
                 password: 'Admin123!',
                 nombre: 'Administrador Principal',
                 rut: '12345678-9',
@@ -30,7 +30,7 @@ function inicializarDatosPrueba() {
             },
             {
                 // RESIDENTE NORMAL
-                email: 'usuario@gastos.cl',
+                email: 'usuario@comunes.cl',
                 password: 'User123!',
                 nombre: 'Juan Pérez Soto',
                 rut: '98765432-1',
@@ -43,7 +43,7 @@ function inicializarDatosPrueba() {
             },
             {
                 // RESIDENTE 2
-                email: 'maria@gastos.cl',
+                email: 'maria@comunes.cl',
                 password: 'Maria123!',
                 nombre: 'María González López',
                 rut: '11222333-4',
@@ -56,7 +56,7 @@ function inicializarDatosPrueba() {
             },
             {
                 // RESIDENTE 3
-                email: 'pedro@gastos.cl',
+                email: 'pedro@comunes.cl',
                 password: 'Pedro123!',
                 nombre: 'Pedro Ramírez Castro',
                 rut: '22333444-5',
@@ -69,7 +69,7 @@ function inicializarDatosPrueba() {
             },
             {
                 // RESIDENTE 4
-                email: 'ana@gastos.cl',
+                email: 'ana@comunes.cl',
                 password: 'Ana123!',
                 nombre: 'Ana Martínez Silva',
                 rut: '33444555-6',
@@ -157,7 +157,7 @@ function inicializarDatosPrueba() {
         const pagosPrueba = [
             {
                 id: 1,
-                email: 'maria@gastos.cl',
+                email: 'maria@comunes.cl',
                 pasaje: '8651',
                 casa: 'C',
                 monto: 28308, // Total dividido por 13 casas
@@ -166,11 +166,11 @@ function inicializarDatosPrueba() {
                 metodoPago: 'transferencia',
                 comprobante: 'TRF-20251015-001',
                 estado: 'confirmado',
-                registradoPor: 'admin@gastos.cl'
+                registradoPor: 'admin@comunes.cl'
             },
             {
                 id: 2,
-                email: 'pedro@gastos.cl',
+                email: 'pedro@comunes.cl',
                 pasaje: '8707',
                 casa: 'A',
                 monto: 28308,
@@ -179,7 +179,7 @@ function inicializarDatosPrueba() {
                 metodoPago: 'efectivo',
                 comprobante: 'EFE-20251020-001',
                 estado: 'confirmado',
-                registradoPor: 'admin@gastos.cl'
+                registradoPor: 'admin@comunes.cl'
             }
         ];
         
@@ -191,8 +191,8 @@ function inicializarDatosPrueba() {
         console.log('💰 Gastos:', gastosPrueba.length);
         console.log('💳 Pagos:', pagosPrueba.length);
         console.log('\n📋 CREDENCIALES DE PRUEBA:');
-        console.log('👨‍💼 Admin: admin@gastos.cl / Admin123! (Casa 8651-A)');
-        console.log('👤 Usuario: usuario@gastos.cl / User123! (Casa 8651-B)');
+        console.log('👨‍💼 Admin: admin@comunes.cl / Admin123! (Casa 8651-A)');
+        console.log('👤 Usuario: usuario@comunes.cl / User123! (Casa 8651-B)');
     } else {
         console.log('✓ Los datos ya existen. No se sobrescriben.');
     }

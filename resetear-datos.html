@@ -39,7 +39,7 @@
         <div class="alert alert-info">
             <h6><i class="bi bi-info-circle"></i> Se crearán:</h6>
             <ul class="mb-0">
-                <li><strong>Administrador:</strong> admin@gastos.cl (con casa 8651-A)</li>
+                <li><strong>Administrador:</strong> admin@comunes.cl (con casa 8651-A)</li>
                 <li><strong>Residentes:</strong> 4 usuarios de prueba</li>
                 <li><strong>Gastos:</strong> 6 gastos comunes</li>
                 <li><strong>Pagos:</strong> 2 pagos de ejemplo</li>
@@ -74,7 +74,7 @@
             // PASO 2: Crear usuarios CORRECTOS
             const usuarios = [
                 {
-                    email: 'admin@gastos.cl',
+                    email: 'admin@comunes.cl',
                     password: 'Admin123!',
                     nombre: 'Administrador Principal',
                     rut: '12.345.678-9',
@@ -86,7 +86,7 @@
                     fechaRegistro: new Date().toISOString()
                 },
                 {
-                    email: 'usuario@gastos.cl',
+                    email: 'usuario@comunes.cl',
                     password: 'User123!',
                     nombre: 'Juan Pérez Soto',
                     rut: '98.765.432-1',
@@ -98,7 +98,7 @@
                     fechaRegistro: new Date().toISOString()
                 },
                 {
-                    email: 'maria@gastos.cl',
+                    email: 'maria@comunes.cl',
                     password: 'Maria123!',
                     nombre: 'María González López',
                     rut: '11.222.333-4',
@@ -110,7 +110,7 @@
                     fechaRegistro: new Date().toISOString()
                 },
                 {
-                    email: 'pedro@gastos.cl',
+                    email: 'pedro@comunes.cl',
                     password: 'Pedro123!',
                     nombre: 'Pedro Ramírez Castro',
                     rut: '22.333.444-5',
@@ -122,7 +122,7 @@
                     fechaRegistro: new Date().toISOString()
                 },
                 {
-                    email: 'ana@gastos.cl',
+                    email: 'ana@comunes.cl',
                     password: 'Ana123!',
                     nombre: 'Ana Martínez Silva',
                     rut: '33.444.555-6',
@@ -209,7 +209,7 @@
             const pagos = [
                 {
                     id: 1,
-                    email: 'maria@gastos.cl',
+                    email: 'maria@comunes.cl',
                     pasaje: '8651',
                     casa: 'C',
                     monto: 28308,
@@ -218,11 +218,11 @@
                     metodoPago: 'transferencia',
                     comprobante: 'TRF-20251015-001',
                     estado: 'confirmado',
-                    registradoPor: 'admin@gastos.cl'
+                    registradoPor: 'admin@comunes.cl'
                 },
                 {
                     id: 2,
-                    email: 'pedro@gastos.cl',
+                    email: 'pedro@comunes.cl',
                     pasaje: '8707',
                     casa: 'A',
                     monto: 28308,
@@ -231,7 +231,7 @@
                     metodoPago: 'efectivo',
                     comprobante: 'EFE-20251020-001',
                     estado: 'confirmado',
-                    registradoPor: 'admin@gastos.cl'
+                    registradoPor: 'admin@comunes.cl'
                 }
             ];
 
@@ -252,7 +252,7 @@
                     <hr>
                     <p class="mb-0"><strong>Credenciales de Admin:</strong></p>
                     <div class="code-block bg-dark text-light p-3 rounded mt-2">
-                        <strong>Email:</strong> admin@gastos.cl<br>
+                        <strong>Email:</strong> admin@comunes.cl<br>
                         <strong>Password:</strong> Admin123!<br>
                         <strong>Casa:</strong> 8651-A<br>
                         <strong>Rol:</strong> administrador ✅

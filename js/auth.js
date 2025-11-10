@@ -28,7 +28,7 @@ const AuthManager = {
                     reject({
                         tipo: 'error',
                         mensaje: 'No existe una cuenta con este correo electrónico.',
-                        detalles: 'Usuarios de prueba:<br>Admin: admin@gastos.cl / Admin123!<br>Usuario: usuario@gastos.cl / User123!'
+                        detalles: 'Usuarios de prueba:<br>Admin: admin@comunes.cl / Admin123!<br>Usuario: usuario@comunes.cl / User123!'
                     });
                     return;
                 }
@@ -109,8 +109,15 @@ const AuthManager = {
         
         if (sesionActual) {
             console.log('Sesión activa detectada:', sesionActual);
-            console.log('Redirigiendo a dashboard...');
-            window.location.href = 'vista_admin/dashboard-admin.html';
+            console.log('Tipo de usuario:', sesionActual.tipo);
+            console.log('Redirigiendo a dashboard correspondiente...');
+            
+            // Redirigir según el tipo de usuario
+            if (sesionActual.tipo === 'administrador') {
+                window.location.href = 'vista_admin/dashboard-admin.html';
+            } else {
+                window.location.href = 'vista_usuario/dashboard-usuario.html';
+            }
             return true;
         }
         
@@ -153,10 +160,18 @@ const AuthManager = {
                 // Mostrar mensaje de éxito
                 window.validacionesComunes.mostrarAlerta('success', resultado.mensaje, 'main');
                 
-                // Redirigir al dashboard
+                // Redirigir según el tipo de usuario
                 setTimeout(() => {
                     console.log('Redirigiendo a dashboard...');
-                    window.location.href = 'vista_admin/dashboard-admin.html';
+                    console.log('Tipo de usuario:', resultado.usuario.tipo);
+                    
+                    if (resultado.usuario.tipo === 'administrador') {
+                        console.log('→ Dashboard Administrador');
+                        window.location.href = 'vista_admin/dashboard-admin.html';
+                    } else {
+                        console.log('→ Dashboard Usuario');
+                        window.location.href = 'vista_usuario/dashboard-usuario.html';
+                    }
                 }, 1500);
                 
             } catch (error) {
@@ -208,4 +223,4 @@ const AuthManager = {
 // Exportar para uso global
 window.AuthManager = AuthManager;
 
-console.log('✅ Módulo auth.js cargado correctamente');
+console.log('✅ Módulo auth.js cargado correctamente - Versión con redirección por rol');
