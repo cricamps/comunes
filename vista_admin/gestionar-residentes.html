@@ -59,6 +59,11 @@
                             <i class="bi bi-file-earmark-bar-graph"></i> Reportes
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuracion.html">
+                            <i class="bi bi-gear"></i> Configuración
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> <span id="nombreAdmin">Admin</span>
@@ -82,7 +87,7 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
                     <div class="mb-2 mb-md-0">
                         <h1 class="fw-bold mb-0">Gestionar Residentes</h1>
-                        <p class="text-muted mb-0">Administra los residentes de la comunidad</p>
+                        <p class="text-muted mb-0">Administra los residentes de la comunidad - Soporte para múltiples residentes por casa</p>
                     </div>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoResidente">
                         <i class="bi bi-person-plus"></i> Nuevo Residente
@@ -202,15 +207,17 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>RUT</th>
+                                <th>Edad</th>
                                 <th>Email</th>
                                 <th>Teléfono</th>
                                 <th>Vivienda</th>
+                                <th>Parentesco</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tablaResidentes">
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-5">
+                                <td colspan="8" class="text-center text-muted py-5">
                                     <div class="spinner-border text-primary" role="status">
                                         <span class="visually-hidden">Cargando...</span>
                                     </div>
@@ -226,7 +233,7 @@
 
     <!-- MODAL NUEVO/EDITAR RESIDENTE -->
     <div class="modal fade" id="modalNuevoResidente" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">
@@ -235,79 +242,167 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formResidente" novalidate>
+                    <form id="formResidente" class="needs-validation" novalidate>
                         <input type="hidden" id="residenteEmail">
                         
+                        <!-- ALERTA DE INFORMACIÓN -->
+                        <div class="alert alert-info mb-4">
+                            <i class="bi bi-info-circle"></i> <strong>Información importante:</strong>
+                            <ul class="mb-0 mt-2 small">
+                                <li>Solo pueden registrarse personas <strong>mayores de 18 años</strong></li>
+                                <li>Cada casa puede tener hasta <strong>10 residentes</strong> registrados</li>
+                                <li>El <strong>titular</strong> es el responsable principal ante la administración</li>
+                            </ul>
+                        </div>
+                        
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="nombre" class="form-label fw-bold">
-                                    <i class="bi bi-person"></i> Nombre Completo *
-                                </label>
-                                <input type="text" class="form-control" id="nombre" required>
-                                <div class="invalid-feedback" id="nombreError"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="rut" class="form-label fw-bold">
-                                    <i class="bi bi-card-text"></i> RUT *
-                                </label>
-                                <input type="text" class="form-control" id="rut" maxlength="12" required>
-                                <div class="invalid-feedback" id="rutError"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label fw-bold">
-                                    <i class="bi bi-envelope"></i> Email *
-                                </label>
-                                <input type="email" class="form-control" id="email" required>
-                                <div class="invalid-feedback" id="emailError"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="telefono" class="form-label fw-bold">
-                                    <i class="bi bi-phone"></i> Teléfono *
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text">+56</span>
-                                    <input type="tel" class="form-control" id="telefono" maxlength="9" required>
+                            <!-- COLUMNA 1: DATOS PERSONALES -->
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-primary mb-3">
+                                    <i class="bi bi-person-badge"></i> Datos Personales
+                                </h6>
+                                
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label fw-bold">
+                                        <i class="bi bi-person"></i> Nombre Completo *
+                                    </label>
+                                    <input type="text" class="form-control" id="nombre" required minlength="3" placeholder="Ej: Juan Pérez González">
+                                    <div class="invalid-feedback">
+                                        El nombre debe tener al menos 3 caracteres
+                                    </div>
                                 </div>
-                                <div class="invalid-feedback" id="telefonoError"></div>
+
+                                <div class="mb-3">
+                                    <label for="rut" class="form-label fw-bold">
+                                        <i class="bi bi-card-text"></i> RUT *
+                                    </label>
+                                    <input type="text" class="form-control" id="rut" maxlength="12" required placeholder="12345678-9">
+                                    <div class="invalid-feedback" id="rutError">
+                                        Ingrese un RUT válido (Ej: 12345678-9)
+                                    </div>
+                                    <small class="text-muted" id="rutInfo"></small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="fechaNacimiento" class="form-label fw-bold">
+                                        <i class="bi bi-calendar-heart"></i> Fecha de Nacimiento *
+                                    </label>
+                                    <input type="date" class="form-control" id="fechaNacimiento" required max="2007-11-09">
+                                    <div class="invalid-feedback" id="edadError">
+                                        Debe ser mayor de 18 años
+                                    </div>
+                                    <small class="text-muted" id="edadInfo"></small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label fw-bold">
+                                        <i class="bi bi-envelope"></i> Email *
+                                    </label>
+                                    <input type="email" class="form-control" id="email" required placeholder="ejemplo@correo.com">
+                                    <div class="invalid-feedback" id="emailError">
+                                        Ingrese un email válido
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="telefono" class="form-label fw-bold">
+                                        <i class="bi bi-phone"></i> Teléfono *
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">+56</span>
+                                        <input type="tel" class="form-control" id="telefono" maxlength="9" required pattern="[0-9]{9}" placeholder="912345678">
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Ingrese un teléfono válido de 9 dígitos
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="pasaje" class="form-label fw-bold">
-                                    <i class="bi bi-geo-alt"></i> Pasaje *
-                                </label>
-                                <select class="form-select" id="pasaje" required>
-                                    <option value="">Seleccionar...</option>
-                                    <option value="8651">Pasaje 8651 (A-F)</option>
-                                    <option value="8707">Pasaje 8707 (A-G)</option>
-                                </select>
-                                <div class="invalid-feedback" id="pasajeError"></div>
-                            </div>
+                            <!-- COLUMNA 2: DATOS DE VIVIENDA -->
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-primary mb-3">
+                                    <i class="bi bi-house-door"></i> Datos de Vivienda
+                                </h6>
+                                
+                                <div class="mb-3">
+                                    <label for="pasaje" class="form-label fw-bold">
+                                        <i class="bi bi-geo-alt"></i> Pasaje *
+                                    </label>
+                                    <select class="form-select" id="pasaje" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="8651">Pasaje 8651 (6 casas: A-F)</option>
+                                        <option value="8707">Pasaje 8707 (7 casas: A-G)</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Debe seleccionar un pasaje
+                                    </div>
+                                </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="casa" class="form-label fw-bold">
-                                    <i class="bi bi-house-door"></i> Casa *
-                                </label>
-                                <select class="form-select" id="casa" required disabled>
-                                    <option value="">Primero selecciona pasaje</option>
-                                </select>
-                                <div class="invalid-feedback" id="casaError"></div>
-                            </div>
+                                <div class="mb-3">
+                                    <label for="casa" class="form-label fw-bold">
+                                        <i class="bi bi-house-door"></i> Casa *
+                                    </label>
+                                    <select class="form-select" id="casa" required disabled>
+                                        <option value="">Primero selecciona pasaje</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Debe seleccionar una casa
+                                    </div>
+                                    <small class="text-muted" id="infoCasa"></small>
+                                </div>
 
-                            <div class="col-md-12 mb-3">
-                                <label for="rol" class="form-label fw-bold">
-                                    <i class="bi bi-shield-check"></i> Rol del Usuario *
-                                </label>
-                                <select class="form-select" id="rol" required>
-                                    <option value="residente">Residente</option>
-                                    <option value="administrador">Administrador</option>
-                                </select>
-                                <small class="text-muted">
-                                    <i class="bi bi-info-circle"></i> Los administradores tienen acceso completo al sistema.
-                                </small>
-                                <div class="invalid-feedback" id="rolError"></div>
+                                <!-- INFORMACIÓN DE RESIDENTES EXISTENTES -->
+                                <div id="infoResidentesExistentes" style="display: none;" class="mb-3">
+                                    <div class="alert alert-info">
+                                        <strong><i class="bi bi-people"></i> Residentes actuales en esta casa:</strong>
+                                        <div id="listaResidentesExistentes" class="mt-2"></div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="parentesco" class="form-label fw-bold">
+                                        <i class="bi bi-people"></i> Parentesco/Relación *
+                                    </label>
+                                    <select class="form-select" id="parentesco" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="titular">Titular/Propietario</option>
+                                        <option value="conyuge">Cónyuge</option>
+                                        <option value="hijo">Hijo/Hija (mayor de 18)</option>
+                                        <option value="familiar">Otro Familiar</option>
+                                        <option value="arrendatario">Arrendatario</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Debe seleccionar el parentesco
+                                    </div>
+                                    <small class="text-muted">Relación con la vivienda</small>
+                                </div>
+
+                                <!-- CHECKBOX PARA MARCAR COMO TITULAR -->
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="esTitular">
+                                        <label class="form-check-label fw-bold" for="esTitular">
+                                            <i class="bi bi-star-fill text-warning"></i> Marcar como titular principal de la casa
+                                        </label>
+                                    </div>
+                                    <small class="text-muted d-block mt-1">
+                                        <i class="bi bi-info-circle"></i> El titular es el responsable principal ante la administración. 
+                                        Si ya existe un titular, este será reemplazado.
+                                    </small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="rol" class="form-label fw-bold">
+                                        <i class="bi bi-shield-check"></i> Rol del Usuario *
+                                    </label>
+                                    <select class="form-select" id="rol" required>
+                                        <option value="residente">Residente</option>
+                                        <option value="administrador">Administrador</option>
+                                    </select>
+                                    <small class="text-muted">
+                                        <i class="bi bi-info-circle"></i> Los administradores tienen acceso completo al sistema.
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -317,7 +412,7 @@
                         <i class="bi bi-x-circle"></i> Cancelar
                     </button>
                     <button type="button" class="btn btn-primary" id="btnGuardarResidente">
-                        <i class="bi bi-check-circle"></i> Guardar
+                        <i class="bi bi-check-circle"></i> Guardar Residente
                     </button>
                 </div>
             </div>
@@ -326,7 +421,7 @@
 
     <!-- MODAL VER RESIDENTE -->
     <div class="modal fade" id="modalVerResidente" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
                     <h5 class="modal-title">
@@ -374,6 +469,7 @@
     
     <!-- JavaScript Personalizado -->
     <script src="../js/script.js"></script>
+    <script src="../js/validaciones-mejoradas.js"></script>
     <script src="../js/admin/gestionar-residentes.js"></script>
 </body>
 </html>

@@ -379,6 +379,53 @@
     
     <!-- JavaScript Personalizado -->
     <script src="js/script.js"></script>
+    <script src="js/sesion.js"></script>
     <script src="js/validaciones-perfil.js"></script>
+    
+    <!-- Script para inicializar toggles de contraseña en perfil -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔑 Inicializando toggles de contraseña en perfil...');
+        
+        // Forzar inicialización de toggles específicos del perfil
+        const toggleButtons = [
+            { btnId: 'togglePasswordActual', inputId: 'passwordActual', iconId: 'eyeIconActual' },
+            { btnId: 'togglePasswordNueva', inputId: 'passwordNueva', iconId: 'eyeIconNueva' },
+            { btnId: 'togglePasswordConfirmar', inputId: 'passwordConfirmar', iconId: 'eyeIconConfirmar' }
+        ];
+        
+        toggleButtons.forEach(({ btnId, inputId, iconId }) => {
+            const btn = document.getElementById(btnId);
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (btn && input && icon) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                        this.setAttribute('aria-label', 'Ocultar contraseña');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                        this.setAttribute('aria-label', 'Mostrar contraseña');
+                    }
+                    
+                    console.log(`✅ Toggle ${btnId}: ${input.type}`);
+                });
+                
+                console.log(`✅ Toggle inicializado: ${btnId}`);
+            } else {
+                console.warn(`⚠️ No se encontró: btn=${!!btn}, input=${!!input}, icon=${!!icon}`);
+            }
+        });
+        
+        console.log('✅ Todos los toggles de contraseña inicializados en perfil');
+    });
+    </script>
 </body>
 </html>

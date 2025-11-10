@@ -59,6 +59,11 @@
                             <i class="bi bi-file-earmark-bar-graph"></i> Reportes
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuracion.html">
+                            <i class="bi bi-gear"></i> Configuración
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> <span id="nombreAdmin">Admin</span>
@@ -185,7 +190,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formGasto" novalidate>
+                    <form id="formGasto" class="needs-validation" novalidate>
                         <input type="hidden" id="gastoId">
                         
                         <div class="row">
@@ -199,8 +204,11 @@
                                     class="form-control" 
                                     id="concepto" 
                                     placeholder="Ej: Cuenta de Agua"
-                                    required>
-                                <div class="invalid-feedback" id="conceptoError"></div>
+                                    required
+                                    minlength="3">
+                                <div class="invalid-feedback">
+                                    El concepto debe tener al menos 3 caracteres
+                                </div>
                             </div>
 
                             <!-- CATEGORÍA -->
@@ -217,7 +225,9 @@
                                     <option value="Reparaciones">Reparaciones</option>
                                     <option value="Otros">Otros</option>
                                 </select>
-                                <div class="invalid-feedback" id="categoriaError"></div>
+                                <div class="invalid-feedback">
+                                    Debe seleccionar una categoría
+                                </div>
                             </div>
 
                             <!-- DESCRIPCIÓN -->
@@ -242,10 +252,12 @@
                                     class="form-control" 
                                     id="monto" 
                                     placeholder="0"
-                                    min="0"
+                                    min="1"
                                     step="1000"
                                     required>
-                                <div class="invalid-feedback" id="montoError"></div>
+                                <div class="invalid-feedback">
+                                    El monto debe ser mayor a 0
+                                </div>
                                 <small class="text-muted">Monto total del gasto</small>
                             </div>
 
@@ -259,7 +271,9 @@
                                     class="form-control" 
                                     id="fecha" 
                                     required>
-                                <div class="invalid-feedback" id="fechaError"></div>
+                                <div class="invalid-feedback">
+                                    Debe seleccionar una fecha
+                                </div>
                             </div>
 
                             <!-- ESTADO -->
@@ -324,6 +338,18 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Toast de Éxito -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="toastExito" class="toast hide" role="alert">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong class="me-auto">¡Éxito!</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMensaje"></div>
         </div>
     </div>
 

@@ -3,44 +3,111 @@
 // ===================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Verificar sesión (administrador O residente)
-    verificarSesion();
+    console.log('\n============================================');
+    console.log('     DASHBOARD CARGADO - INICIO');
+    console.log('============================================\n');
     
-    // Cargar datos del dashboard según el rol
-    cargarNombreUsuario();
+    // Verificar sesión usando SesionManager
+    if (window.SesionManager) {
+        window.SesionManager.verificarSesion();
+        window.SesionManager.actualizarNombreNavbar();
+    }
+    
+    // Mostrar fecha actual
     mostrarFechaActual();
     
-    // Cargar información personal (TODOS)
+    // Cargar información personal (TODOS los usuarios)
     cargarMiInformacion();
     
-    // Determinar si es admin y mostrar/ocultar secciones
+    // OBTENER LA SESIÓN DIRECTAMENTE
     const sesion = window.validacionesComunes.obtenerDeStorage('sesionActual');
-    const esAdmin = (sesion && sesion.tipo === 'administrador');
+    
+    console.log('\n=== INFORMACIÓN DE SESIÓN ===');
+    console.log('Sesión completa:', sesion);
+    
+    if (sesion) {
+        console.log('Email:', sesion.email);
+        console.log('Nombre:', sesion.nombre);
+        console.log('Tipo:', sesion.tipo);
+        console.log('Rol:', sesion.rol);
+        console.log('Casa:', sesion.pasaje, '-', sesion.casa);
+    }
+    
+    // VERIFICAR SI ES ADMINISTRADOR - MÚLTIPLES MÉTODOS
+    const esAdminMetodo1 = sesion && sesion.tipo === 'administrador';
+    const esAdminMetodo2 = sesion && sesion.rol === 'administrador';
+    const esAdminMetodo3 = window.SesionManager ? window.SesionManager.esAdministrador() : false;
+    
+    console.log('\n=== VERIFICACIÓN DE ROL ===');
+    console.log('¿Es Admin? (tipo === "administrador"):', esAdminMetodo1);
+    console.log('¿Es Admin? (rol === "administrador"):', esAdminMetodo2);
+    console.log('¿Es Admin? (SesionManager):', esAdminMetodo3);
+    
+    // USAR CUALQUIER MÉTODO QUE RETORNE TRUE
+    const esAdmin = esAdminMetodo1 || esAdminMetodo2 || esAdminMetodo3;
+    
+    console.log('\n=== DECISIÓN FINAL ===');
+    console.log('✅ Usuario ES ADMINISTRADOR:', esAdmin);
+    console.log('============================================\n');
+    
+    // MOSTRAR/OCULTAR SECCIÓN ADMINISTRATIVA
+    const seccionAdmin = document.getElementById('seccionAdmin');
+    
+    if (!seccionAdmin) {
+        console.error('❌ ERROR: No se encontró el elemento #seccionAdmin');
+    } else {
+        console.log('✅ Elemento #seccionAdmin encontrado');
+    }
     
     if (esAdmin) {
-        // ADMINISTRADOR: Ver TODO
-        console.log('Mostrando vista completa de administrador');
-        document.getElementById('seccionAdmin').style.display = 'block';
+        // ADMINISTRADOR: Ver TODO (personal + administrativa)
+        console.log('\n👑 MODO ADMINISTRADOR ACTIVADO');
+        console.log('   - Mostrando sección personal');
+        console.log('   - Mostrando sección administrativa');
+        
+        if (seccionAdmin) {
+            seccionAdmin.style.display = 'block';
+            seccionAdmin.style.visibility = 'visible';
+            seccionAdmin.classList.remove('d-none');
+            console.log('   ✅ Sección administrativa VISIBLE');
+        }
         
         // Cargar estadísticas administrativas
+        console.log('   - Cargando estadísticas...');
         cargarEstadisticas();
         cargarGastosRecientes();
         cargarPagosRecientes();
         cargarDistribucionPasajes();
+        console.log('   ✅ Estadísticas cargadas\n');
     } else {
-        // RESIDENTE: Ocultar sección administrativa
-        console.log('Mostrando vista limitada de residente');
-        document.getElementById('seccionAdmin').style.display = 'none';
+        // RESIDENTE: Solo ver información personal
+        console.log('\n👤 MODO RESIDENTE ACTIVADO');
+        console.log('   - Mostrando sección personal');
+        console.log('   - Ocultando sección administrativa');
+        
+        if (seccionAdmin) {
+            seccionAdmin.style.display = 'none';
+            seccionAdmin.style.visibility = 'hidden';
+            seccionAdmin.classList.add('d-none');
+            console.log('   ✅ Sección administrativa OCULTA\n');
+        }
     }
     
-    // Cerrar sesión
-    document.getElementById('btnCerrarSesion').addEventListener('click', function(e) {
-        e.preventDefault();
-        cerrarSesion();
-    });
+    // Inicializar botón de cerrar sesión
+    const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+    if (btnCerrarSesion && window.SesionManager) {
+        btnCerrarSesion.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.SesionManager.cerrarSesion();
+        });
+    }
     
     // Inicializar datos de prueba si no existen
     inicializarDatosPrueba();
+    
+    console.log('============================================');
+    console.log('     DASHBOARD CARGADO - FIN');
+    console.log('============================================\n');
 });
 
 // ===================================

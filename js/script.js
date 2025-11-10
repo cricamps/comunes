@@ -203,18 +203,29 @@ function initTogglePassword() {
     const toggleButtons = document.querySelectorAll('[id^="togglePassword"]');
     
     toggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const passwordInput = this.previousElementSibling;
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevenir cualquier comportamiento por defecto
+            
+            // Buscar el input de contraseña (puede estar como hermano anterior o dentro del mismo contenedor)
+            const container = this.closest('.input-group');
+            const passwordInput = container ? container.querySelector('input[type="password"], input[type="text"]') : this.previousElementSibling;
             const icon = this.querySelector('i');
             
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('bi-eye');
-                icon.classList.add('bi-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('bi-eye-slash');
-                icon.classList.add('bi-eye');
+            if (passwordInput && icon) {
+                // Toggle del tipo de input
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                    this.setAttribute('aria-label', 'Ocultar contraseña');
+                    this.setAttribute('title', 'Ocultar contraseña');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                    this.setAttribute('aria-label', 'Mostrar contraseña');
+                    this.setAttribute('title', 'Mostrar contraseña');
+                }
             }
         });
     });

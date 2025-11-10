@@ -25,6 +25,7 @@ function inicializarDatosPrueba() {
                 pasaje: '8651',
                 casa: 'A',  // Admin también tiene casa
                 rol: 'administrador', // ROL define si es admin o residente
+                tipo: 'administrador', // TIPO también debe ser administrador
                 fechaRegistro: new Date().toISOString()
             },
             {
@@ -37,6 +38,7 @@ function inicializarDatosPrueba() {
                 pasaje: '8651',
                 casa: 'B',
                 rol: 'residente', // ROL residente
+                tipo: 'residente', // TIPO residente
                 fechaRegistro: new Date().toISOString()
             },
             {
@@ -49,6 +51,7 @@ function inicializarDatosPrueba() {
                 pasaje: '8651',
                 casa: 'C',
                 rol: 'residente',
+                tipo: 'residente',
                 fechaRegistro: new Date().toISOString()
             },
             {
@@ -61,6 +64,7 @@ function inicializarDatosPrueba() {
                 pasaje: '8707',
                 casa: 'A',
                 rol: 'residente',
+                tipo: 'residente',
                 fechaRegistro: new Date().toISOString()
             },
             {
@@ -73,6 +77,7 @@ function inicializarDatosPrueba() {
                 pasaje: '8707',
                 casa: 'B',
                 rol: 'residente',
+                tipo: 'residente',
                 fechaRegistro: new Date().toISOString()
             }
         ];

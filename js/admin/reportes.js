@@ -596,3 +596,256 @@ function cerrarSesion(e) {
         window.location.href = '../login.html';
     }
 }
+
+// ===================================
+// FUNCIONES DE VISTA PREVIA
+// ===================================
+
+let reporteActual = null;
+
+/**
+ * Muestra la vista previa de un reporte
+ */
+window.verVistaPrevia = function(tipoReporte) {
+    reporteActual = tipoReporte;
+    const vistaPrevia = document.getElementById('vistaPrevia');
+    const btnDescargar = document.getElementById('btnDescargarReporte');
+    
+    let contenidoHTML = '';
+    
+    switch(tipoReporte) {
+        case 'gastos':
+            contenidoHTML = generarVistaPreviaGastos();
+            break;
+        case 'pagos':
+            contenidoHTML = generarVistaPrevia_Pagos();
+            break;
+        case 'residentes':
+            contenidoHTML = generarVistaPreviaResidentes();
+            break;
+        case 'general':
+            contenidoHTML = generarVistaPreviaGeneral();
+            break;
+    }
+    
+    vistaPrevia.innerHTML = contenidoHTML;
+    btnDescargar.style.display = 'block';
+    
+    // Scroll suave a la vista previa
+    vistaPrevia.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+/**
+ * Genera la vista previa del reporte de gastos
+ */
+function generarVistaPreviaGastos() {
+    const fechaActual = new Date();
+    const mesActual = `${fechaActual.getFullYear()}-${String(fechaActual.getMonth() + 1).padStart(2, '0')}`;
+    const gastosDelMes = gastos.filter(g => {
+        const fechaGasto = new Date(g.fecha);
+        const mesGasto = `${fechaGasto.getFullYear()}-${String(fechaGasto.getMonth() + 1).padStart(2, '0')}`;
+        return mesGasto === mesActual;
+    });
+    
+    const totalGastos = gastosDelMes.reduce((sum, g) => sum + g.monto, 0);
+    const montoPorCasa = Math.round(totalGastos / 13);
+    
+    let html = '<div class="text-start">';
+    html += '<h4 class="fw-bold text-primary mb-3">REPORTE DE GASTOS COMUNES</h4>';
+    html += `<p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')}</p>`;
+    html += '<hr>';
+    html += '<h5 class="fw-bold">RESUMEN</h5>';
+    html += `<p><strong>Total de Gastos:</strong> ${totalGastos.toLocaleString('es-CL')}</p>`;
+    html += `<p><strong>Cantidad de Gastos:</strong> ${gastosDelMes.length}</p>`;
+    html += `<p><strong>Monto por Casa:</strong> ${montoPorCasa.toLocaleString('es-CL')}</p>`;
+    html += '<hr>';
+    html += '<h5 class="fw-bold">DETALLE</h5>';
+    html += '<table class="table table-striped table-hover">';
+    html += '<thead class="table-primary"><tr><th>ID</th><th>Concepto</th><th>Categoría</th><th>Monto</th><th>Fecha</th><th>Estado</th></tr></thead>';
+    html += '<tbody>';
+    
+    gastosDelMes.forEach(g => {
+        html += '<tr>';
+        html += `<td>${g.id}</td>`;
+        html += `<td>${g.concepto}</td>`;
+        html += `<td>${g.categoria}</td>`;
+        html += `<td>${g.monto.toLocaleString('es-CL')}</td>`;
+        html += `<td>${new Date(g.fecha).toLocaleDateString('es-CL')}</td>`;
+        html += `<td><span class="badge bg-success">${g.estado}</span></td>`;
+        html += '</tr>';
+    });
+    
+    html += '</tbody></table>';
+    html += '</div>';
+    
+    return html;
+}
+
+/**
+ * Genera la vista previa del reporte de pagos
+ */
+function generarVistaPrevia_Pagos() {
+    const fechaActual = new Date();
+    const mesActual = `${fechaActual.getFullYear()}-${String(fechaActual.getMonth() + 1).padStart(2, '0')}`;
+    const pagosDelMes = pagos.filter(p => p.mes === mesActual && p.estado === 'confirmado');
+    const totalRecaudado = pagosDelMes.reduce((sum, p) => sum + p.monto, 0);
+    
+    let html = '<div class="text-start">';
+    html += '<h4 class="fw-bold text-success mb-3">REPORTE DE PAGOS</h4>';
+    html += `<p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')}</p>`;
+    html += '<hr>';
+    html += '<h5 class="fw-bold">RESUMEN</h5>';
+    html += `<p><strong>Total Recaudado:</strong> ${totalRecaudado.toLocaleString('es-CL')}</p>`;
+    html += `<p><strong>Cantidad de Pagos:</strong> ${pagosDelMes.length}</p>`;
+    html += '<hr>';
+    html += '<h5 class="fw-bold">DETALLE</h5>';
+    html += '<table class="table table-striped table-hover">';
+    html += '<thead class="table-success"><tr><th>Residente</th><th>Casa</th><th>Monto</th><th>Método</th><th>Fecha Pago</th><th>Comprobante</th></tr></thead>';
+    html += '<tbody>';
+    
+    pagosDelMes.forEach(p => {
+        const residente = usuarios.find(u => u.email === p.email);
+        html += '<tr>';
+        html += `<td>${residente ? residente.nombre : p.email}</td>`;
+        html += `<td>${p.pasaje}-${p.casa}</td>`;
+        html += `<td>${p.monto.toLocaleString('es-CL')}</td>`;
+        html += `<td>${p.metodoPago}</td>`;
+        html += `<td>${new Date(p.fechaPago).toLocaleDateString('es-CL')}</td>`;
+        html += `<td>${p.comprobante || '-'}</td>`;
+        html += '</tr>';
+    });
+    
+    html += '</tbody></table>';
+    html += '</div>';
+    
+    return html;
+}
+
+/**
+ * Genera la vista previa del reporte de residentes
+ */
+function generarVistaPreviaResidentes() {
+    const residentes = usuarios.filter(u => u.pasaje && u.casa);
+    
+    let html = '<div class="text-start">';
+    html += '<h4 class="fw-bold text-info mb-3">LISTA DE RESIDENTES</h4>';
+    html += `<p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')}</p>`;
+    html += '<hr>';
+    html += '<h5 class="fw-bold">RESUMEN</h5>';
+    html += `<p><strong>Total de Residentes:</strong> ${residentes.length}</p>`;
+    html += `<p><strong>Pasaje 8651:</strong> ${residentes.filter(r => r.pasaje === '8651').length} casas</p>`;
+    html += `<p><strong>Pasaje 8707:</strong> ${residentes.filter(r => r.pasaje === '8707').length} casas</p>`;
+    html += '<hr>';
+    html += '<h5 class="fw-bold">DETALLE</h5>';
+    html += '<table class="table table-striped table-hover">';
+    html += '<thead class="table-info"><tr><th>Nombre</th><th>RUT</th><th>Casa</th><th>Teléfono</th><th>Email</th><th>Rol</th></tr></thead>';
+    html += '<tbody>';
+    
+    residentes.forEach(r => {
+        html += '<tr>';
+        html += `<td>${r.nombre}</td>`;
+        html += `<td>${r.rut}</td>`;
+        html += `<td>${r.pasaje}-${r.casa}</td>`;
+        html += `<td>+56 ${r.telefono}</td>`;
+        html += `<td>${r.email}</td>`;
+        html += `<td><span class="badge ${r.rol === 'administrador' ? 'bg-danger' : 'bg-primary'}">${r.rol === 'administrador' ? 'Admin' : 'Residente'}</span></td>`;
+        html += '</tr>';
+    });
+    
+    html += '</tbody></table>';
+    html += '</div>';
+    
+    return html;
+}
+
+/**
+ * Genera la vista previa del reporte general
+ */
+function generarVistaPreviaGeneral() {
+    const fechaActual = new Date();
+    const mesActual = `${fechaActual.getFullYear()}-${String(fechaActual.getMonth() + 1).padStart(2, '0')}`;
+    
+    const gastosDelMes = gastos.filter(g => {
+        const fechaGasto = new Date(g.fecha);
+        const mesGasto = `${fechaGasto.getFullYear()}-${String(fechaGasto.getMonth() + 1).padStart(2, '0')}`;
+        return mesGasto === mesActual;
+    });
+    
+    const totalGastos = gastosDelMes.reduce((sum, g) => sum + g.monto, 0);
+    const pagosDelMes = pagos.filter(p => p.mes === mesActual && p.estado === 'confirmado');
+    const totalRecaudado = pagosDelMes.reduce((sum, p) => sum + p.monto, 0);
+    const pendiente = totalGastos - totalRecaudado;
+    const residentes = usuarios.filter(u => u.pasaje && u.casa);
+    const tasaPago = residentes.length > 0 ? Math.round((pagosDelMes.length / residentes.length) * 100) : 0;
+    
+    let html = '<div class="text-start">';
+    html += '<h4 class="fw-bold text-warning mb-3">REPORTE GENERAL - Gastos Comunes</h4>';
+    html += `<p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')}</p>`;
+    html += '<hr>';
+    
+    // Sección 1
+    html += '<h5 class="fw-bold">1. RESUMEN FINANCIERO</h5>';
+    html += `<p><strong>Total Gastos del Mes:</strong> ${totalGastos.toLocaleString('es-CL')}</p>`;
+    html += `<p><strong>Total Recaudado:</strong> ${totalRecaudado.toLocaleString('es-CL')}</p>`;
+    html += `<p><strong>Pendiente por Cobrar:</strong> ${pendiente.toLocaleString('es-CL')}</p>`;
+    html += `<p><strong>Tasa de Pago:</strong> ${tasaPago}%</p>`;
+    html += '<hr>';
+    
+    // Sección 2
+    html += '<h5 class="fw-bold">2. ESTADÍSTICAS GENERALES</h5>';
+    html += `<p><strong>Total de Residentes:</strong> ${residentes.length}</p>`;
+    html += `<p><strong>Cantidad de Gastos:</strong> ${gastosDelMes.length}</p>`;
+    html += `<p><strong>Cantidad de Pagos:</strong> ${pagosDelMes.length}</p>`;
+    html += `<p><strong>Monto por Casa:</strong> ${Math.round(totalGastos / 13).toLocaleString('es-CL')}</p>`;
+    html += '<hr>';
+    
+    // Sección 3
+    html += '<h5 class="fw-bold">3. GASTOS POR CATEGORÍA</h5>';
+    
+    const gastosPorCategoria = {};
+    gastosDelMes.forEach(g => {
+        if (gastosPorCategoria[g.categoria]) {
+            gastosPorCategoria[g.categoria] += g.monto;
+        } else {
+            gastosPorCategoria[g.categoria] = g.monto;
+        }
+    });
+    
+    html += '<ul>';
+    Object.entries(gastosPorCategoria).forEach(([categoria, monto]) => {
+        const porcentaje = ((monto / totalGastos) * 100).toFixed(1);
+        html += `<li><strong>${categoria}:</strong> ${monto.toLocaleString('es-CL')} (${porcentaje}%)</li>`;
+    });
+    html += '</ul>';
+    
+    html += '</div>';
+    
+    return html;
+}
+
+/**
+ * Descarga el reporte actual como PDF
+ */
+window.descargarReporteActual = function() {
+    if (!reporteActual) {
+        window.validacionesComunes.mostrarAlerta('warning', 
+            '⚠️ Selecciona un reporte primero', 
+            'main');
+        return;
+    }
+    
+    switch(reporteActual) {
+        case 'gastos':
+            generarReporteGastos();
+            break;
+        case 'pagos':
+            generarReportePagos();
+            break;
+        case 'residentes':
+            generarReporteResidentes();
+            break;
+        case 'general':
+            generarReporteGeneral();
+            break;
+    }
+};
